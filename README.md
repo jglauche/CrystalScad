@@ -1,12 +1,18 @@
 CrystalScad
 ===========
 
-Produce OpenSCAD code in Ruby. Based on RubyScad
+Produce OpenSCAD code in Ruby. 
 
 Requires Ruby 1.9.3
+Required gems: rubyscad
 
-Currently not feature complete
+Currently not OpenSCAD feature complete
 
+Installation:
+===========
+#gem install crystalscad
+
+if you have multiple ruby versions, you likely need to use gem1.9.3 instead of gem
 
 Features
 ===========
@@ -14,28 +20,9 @@ Features
 - Automatic BOM when using the Hardware lib
 
 
-Example Code:
+Real World Example:
 ===========
-
-require "crystalscad"
-
-include CrystalScad
-
-assembly = cylinder(r:5,h:10).translate(x:10).rotate(y:45)
-
-assembly+= cube([10,20,30]).translate(x:-1)
-
-assembly-= Bolt.new(3,25).output.translate(x:2,y:2)
-
-assembly-= Bolt.new(3,25).output.translate(x:6,y:6)
-
-
-# for openscad output
-puts assembly.output
-
-
-# for BOM output
-puts @@bom.output
+https://github.com/Joaz/bulldozer/blob/master/new_model/bulldozer.rb
 
 
 
