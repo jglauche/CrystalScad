@@ -19,7 +19,7 @@ module CrystalScad
 		def walk_tree
 			res = ""			
 			
-			@transformations.each{|trans|
+			@transformations.reverse.each{|trans|
 				res += trans.walk_tree 
 			}
 			res += self.to_rubyscad.to_s+ "\n"
