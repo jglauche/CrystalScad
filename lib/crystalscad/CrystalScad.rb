@@ -18,8 +18,9 @@ module CrystalScad
 
 		def walk_tree
 			res = ""			
+			
 			@transformations.each{|trans|
-				res += trans.walk_tree	 
+				res += trans.walk_tree 
 			}
 			res += self.to_rubyscad.to_s+ "\n"
 			res
@@ -29,19 +30,6 @@ module CrystalScad
 		def to_rubyscad
 			""
 		end
-	
-	end
-
-	class TransformedObject < ScadObject
-		attr_accessor :scad
-		def initialize(string)
-			@scad = string
-		end		
-	
-		def walk_tree
-			return @scad		
-		end
-
 	
 	end
 
@@ -64,17 +52,22 @@ module CrystalScad
 
   end
 
-	class Transformation < ScadObject
+	class TransformedObject < Primitive
+		attr_accessor :scad
+		def initialize(string)
+			@scad = string
+			@transformations = []
+		end		
+	
+		def to_rubyscad
+			return @scad		
+		end
+		alias :output :walk_tree
+	
 	end
 
-#	class Union < Transformation
-#		def to_rubyscad
-#			str= RubyScadBridge.new.union(){
-#				@args			
-#			}		
-#			str
-#		end	
-#	end
+	class Transformation < ScadObject
+	end
 
 	class Rotate < Transformation
 		def to_rubyscad
@@ -94,10 +87,52 @@ module CrystalScad
 		end	
 	end
 
+	def cylinder(args)
+		Cylinder.new(args)		
+	end
+	
 	class Cube < Primitive
 		def to_rubyscad
 			return RubyScadBridge.new.cube(@args)		
 		end	
+	end
+
+	def cube(args)
+		if args.kind_of? Array
+			args = {size:args}
+		end	
+		Cube.new(args)	
+	end
+
+	#	2d primitives
+	class Square < Primitive
+		def to_rubyscad
+			return RubyScadBridge.new.square(@args)		
+		end			
+	end
+
+	def square(args)
+		Square.new(args)	
+	end
+
+	class Circle < Primitive
+		def to_rubyscad
+			return RubyScadBridge.new.circle(@args)		
+		end			
+	end
+
+	def circle(args)
+		Circle.new(args)	
+	end
+
+	class Polygon < Primitive
+		def to_rubyscad
+			return RubyScadBridge.new.polygon(@args)		
+		end			
+	end
+
+	def polygon(args)
+		Polygon.new(args)	
 	end
 
 	
@@ -117,17 +152,6 @@ module CrystalScad
 		end
 
 
-	end
-
-	def cylinder(args)
-		Cylinder.new(args)		
-	end
-	
-	def cube(args)
-		if args.kind_of? Array
-			args = {size:args}
-		end	
-		Cube.new(args)	
 	end
 
 	
@@ -157,6 +181,14 @@ module CrystalScad
 		ret +=self.walk_tree
 		ret +="}"
 		return TransformedObject.new(ret)		
+	end
+
+	def linear_extrude(args)
+		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
+		ret = "linear_extrude(#{args}){"
+		ret +=self.walk_tree
+		ret +="}"
+		return TransformedObject.new(ret)				
 	end
 
 end
