@@ -55,10 +55,58 @@ module CrystalScad::Hardware
 			end				
 			res
 		end
-		
-		
-		
+				
 	end
+
+
+	class Nut
+		attr_accessor :height
+		def initialize(size,args={})
+			@size = size
+			@type = args[:type] ||= "934"
+			@material = args[:material] ||= "8.8"
+			@surface = args[:surface] ||= "zinc plated"
+
+			@@bom.add(description) unless args[:no_bom] == true
+			prepare_data
+		end
+
+		def description
+			"M#{@size} Nut, DIN #{@type}, #{@material} #{@surface}"
+		end
+
+		def prepare_data
+			chart_934 = {2.5=> {side_to_side:5,height:2}, 
+										3 => {side_to_side:5.5,height:2.4},
+									  4 => {side_to_side:7,height:3.2},
+										5 => {side_to_side:8,height:4},
+										6 => {side_to_side:10,height:5},
+										8 => {side_to_side:13,height:6.5},
+									 10 => {side_to_side:17,height:8},
+									 12 => {side_to_side:19,height:10},
+
+									}
+			@s = chart_934[@size][:side_to_side]
+			@height = chart_934[@size][:height]
+		end
+
+		def output(margin=0.2)
+			return nut_934(margin)
+		end
+
+		def show
+			return nut_934
+		end
+
+		def nut_934(margin=0)		
+			@s += margin
+			nut=cylinder(d:(@s/Math.sqrt(3))*2,h:@height,fn:6)
+			nut-=cylinder(d:@size,h:@height)
+			nut.color("Gainsboro")
+		end	
+
+	end
+
 
 	class TSlot
 		# the code in this class is based on code by Nathan Zadoks 	
