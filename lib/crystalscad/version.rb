@@ -1,4 +1,4 @@
 module CrystalScad
-  VERSION = "0.1.0"
+  VERSION = "02.0"
 end
 
