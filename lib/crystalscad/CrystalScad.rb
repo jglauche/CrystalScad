@@ -18,6 +18,7 @@ require "rubyscad"
 
 module CrystalScad 
 	include CrystalScad::BillOfMaterial
+	include CrystalScad::Hardware
 
 	class ScadObject
 		attr_accessor :args		
