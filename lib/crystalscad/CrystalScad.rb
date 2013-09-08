@@ -180,14 +180,17 @@ module CrystalScad
 	end
 
 	def +(args)	
+		return args	 if self == nil		
 		csg_operation("union",self.walk_tree,args.walk_tree)
 	end
 
 	def -(args)
+		return args	 if self == nil		
 		csg_operation("difference",self.walk_tree,args.walk_tree)		
 	end
 	
 	def *(args)
+		return args	 if self == nil		
 		csg_operation("intersection",self.walk_tree,args.walk_tree)		
 	end
 	
