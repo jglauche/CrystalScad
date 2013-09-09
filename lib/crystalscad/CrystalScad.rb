@@ -130,7 +130,8 @@ module CrystalScad
 	  
 	  def initialize(*args)
 	    super(args)
-	    @x,@y,@z = args[0][:size] 	    
+	    @x,@y,@z = args[0][:size].map{|l| l.to_f}
+    
 	  end
 	
 		def to_rubyscad
@@ -217,6 +218,10 @@ module CrystalScad
 	def *(args)
 		return args	 if self == nil		
 		csg_operation("intersection",self.walk_tree,args.walk_tree)		
+	end
+	
+	def hull(part1,part2)
+	  csg_operation("hull",part1.walk_tree,part2.walk_tree)		  
 	end
 	
 	# Fixme: currently just accepting named colors

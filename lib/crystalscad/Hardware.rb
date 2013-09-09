@@ -38,10 +38,25 @@ module CrystalScad::Hardware
 		def bolt_912(addtional_size=0.2)
 			
 	
-			chart_din912 = {3 => {head_dia:5.5,head_length:3,thread_length:18},
+			chart_din912 = {2 => {head_dia:3.8,head_length:2,thread_length:16},
+              			  2.5=> {head_dia:4.5,head_length:2.5,thread_length:17},
+			                3 => {head_dia:5.5,head_length:3,thread_length:18},
 											4 => {head_dia:7.0,head_length:4,thread_length:20},
 											5 => {head_dia:8.5,head_length:5,thread_length:22},
-											8	=> {head_dia:13,head_length:8,thread_length:28}
+											6	=> {head_dia:10,head_length:6,thread_length:24},
+											8	=> {head_dia:13,head_length:8,thread_length:28},
+	  									10=> {head_dia:16,head_length:10,thread_length:32},
+	  									12=> {head_dia:18,head_length:12,thread_length:36},
+	  									14=> {head_dia:21,head_length:14,thread_length:40},
+	  									16=> {head_dia:24,head_length:16,thread_length:44},
+	  									18=> {head_dia:27,head_length:18,thread_length:48},
+	  									20=> {head_dia:30,head_length:20,thread_length:52},
+	  									22=> {head_dia:33,head_length:22,thread_length:56},
+	  									24=> {head_dia:36,head_length:24,thread_length:60},
+	  									30=> {head_dia:45,head_length:30,thread_length:72},
+	  									36=> {head_dia:54,head_length:36,thread_length:84},
+										
+										
 										 }
 
 			res = cylinder(d:chart_din912[@size][:head_dia],h:chart_din912[@size][:head_length]).translate(z:-chart_din912[@size][:head_length]).color("Gainsboro") 
