@@ -19,7 +19,8 @@ require "rubyscad"
 module CrystalScad 
 	include CrystalScad::BillOfMaterial
 	include CrystalScad::Hardware
-
+	include CrystalScad::LinearBearing
+	
 	class ScadObject
 		attr_accessor :args		
   	attr_accessor :transformations
@@ -66,6 +67,11 @@ module CrystalScad
 			self			
 		end
 
+		def mirror(args)
+			@transformations << Mirror.new(args)		
+			self			
+		end
+
   end
 
 	class TransformedObject < Primitive
@@ -96,7 +102,14 @@ module CrystalScad
 			return RubyScadBridge.new.translate(@args)		
 		end	
 	end
-
+	
+ 	class Mirror < Transformation
+		def to_rubyscad
+			return RubyScadBridge.new.mirror(@args)		
+		end	
+	end
+	
+	
 	class Cylinder < Primitive
 		def to_rubyscad	
 			return RubyScadBridge.new.cylinder(@args)		

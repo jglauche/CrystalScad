@@ -128,13 +128,15 @@ module CrystalScad::Hardware
 			if length != nil
 				@args[:length] = length
 			end
-			@@bom.add(bom_string,1) unless @@bom == nil
+			@@bom.add(description) unless args[:no_bom] == true
 
 			return TransformedObject.new(single_profile.output)	 if @args[:configuration] == 1 		
 			return TransformedObject.new(multi_profile.output)	 				
 		end
+		
+    alias :show :output
 
-		def bom_string
+		def description
 			"T-Slot #{@args[:size]}x#{@args[:size]*@args[:configuration]}, length #{@args[:length]}mm"
 		end
 
@@ -175,12 +177,12 @@ module CrystalScad::Hardware
 
 		alias tslot_output output
 
-		def output(length)
+		def output(length=nil)
 			tslot_output(length)-bolts		
 		end
 
-		def show
-			output+bolts
+		def show(length=nil)
+			output(length)+bolts
 		end
 
 		def bolts
@@ -202,7 +204,7 @@ module CrystalScad::Hardware
 			bolt
 		end
 
-		def bom_string
+		def description
 			str = "T-Slot #{@args[:size]}x#{@args[:size]*@args[:configuration]}, length #{@args[:length]}mm"
 			if @args[:holes] != nil
 				str << " with holes for M#{@args[:bolt_size]} on "+ @args[:holes].split(",").join(' and ')
