@@ -23,7 +23,7 @@ module CrystalScad
 	
 	class ScadObject
 		attr_accessor :args		
-  	attr_accessor :transformations
+    attr_accessor :transformations
 		def initialize(*args)
 			@transformations = []
 			@args = args.flatten
@@ -53,6 +53,11 @@ module CrystalScad
 	class Primitive < ScadObject
 
 		def rotate(args)
+		  # always make sure we have a z parameter; otherwise RubyScad will produce a 2-dimensional output
+		  # which can result in openscad weirdness
+		  if args[:z] == nil
+		    args[:z] = 0
+		  end
 			@transformations << Rotate.new(args)	
 			self
 		end
@@ -121,6 +126,13 @@ module CrystalScad
 	end
 	
 	class Cube < Primitive
+	  attr_accessor :x,:y,:z
+	  
+	  def initialize(*args)
+	    super(args)
+	    @x,@y,@z = args[0][:size] 	    
+	  end
+	
 		def to_rubyscad
 			return RubyScadBridge.new.cube(@args)		
 		end	
