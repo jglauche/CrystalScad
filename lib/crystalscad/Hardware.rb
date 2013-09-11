@@ -168,7 +168,7 @@ module CrystalScad::Hardware
 			profile-=circle(r:gap/2,center:true);
 			profile=profile.translate(x:size/2,y:size/2);
 		
-			return profile.linear_extrude(height:@args[:length])		
+			return profile.linear_extrude(height:@args[:length],convexity:2)		
 		end
 
 		def multi_profile
