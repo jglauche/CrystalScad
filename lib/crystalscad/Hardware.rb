@@ -16,30 +16,36 @@
 module CrystalScad::Hardware 
 
 	class Bolt	< CrystalScad::Assembly
-		def initialize(size,length, type="912", material="8.8", surface="zinc plated")
+		def initialize(size,length,args={})
+			@args = args
+			@args[:type] ||= "912"
+			@args[:material] ||= "8.8"
+			@args[:surface] ||= "zinc plated"
+			# options for output only:	
+			@args[:additional_length] ||= 0
+			@args[:additional_diameter] ||= 0.2 
+
 			@size = size
 			@length = length
-			@type = type
-			@material = material
-			@surface = surface
+
 
 			@@bom.add(description)
 		end
 
 		def description
-			"M#{@size}x#{@length} Bolt, DIN #{@type}, #{@material} #{@surface}"
+			"M#{@size}x#{@length} Bolt, DIN #{@args[:type]}, #{@args[:material]} #{@args[:surface]}"
 		end
 
 		def output
-			return bolt_912
+			return bolt_912(@args[:additional_length],@args[:additional_diameter])
 		end
 
 		def show
-			return bolt_912(0)
+			return bolt_912(0,0)
 		end
 
 		# currently only din912	
-		def bolt_912(addtional_size=0.2)
+		def bolt_912(additional_length=0, addtional_diameter=0)
 			
 	
 			chart_din912 = {2 => {head_dia:3.8,head_length:2,thread_length:16},
@@ -65,18 +71,47 @@ module CrystalScad::Hardware
 
 			res = cylinder(d:chart_din912[@size][:head_dia],h:chart_din912[@size][:head_length]).translate(z:-chart_din912[@size][:head_length]).color("Gainsboro") 
 			
+			total_length = @length + additional_length
 			thread_length=chart_din912[@size][:thread_length]		
-	    if @length.to_i <= thread_length
-				res+= cylinder(d:@size+addtional_size, h:@length).color("DarkGray")
+	    if total_length.to_f <= thread_length
+				res+= cylinder(d:@size+addtional_diameter, h:total_length).color("DarkGray")
 			else
-				res+= cylinder(d:@size+addtional_size, h:@length-thread_length).color("Gainsboro")
-				res+= cylinder(d:@size+addtional_size, h:thread_length).translate(z:@length-thread_length).color("DarkGray")		
+				res+= cylinder(d:@size+addtional_diameter, h:total_length-thread_length).color("Gainsboro")
+				res+= cylinder(d:@size+addtional_diameter, h:thread_length).translate(z:total_length-thread_length).color("DarkGray")		
 			end				
 			res
 		end
 				
 	end
+	
+	class Washer	< CrystalScad::Assembly
+		def initialize(size,args={})
+			@args=args			
+			@size = size
+			@args[:type] ||= "125"
+			@args[:material] ||= "steel"
+			@args[:surface] ||= "zinc plated"			
 
+			@chart_din125 = { 3.2 => {outer_diameter:7, height:0.5},
+ 											  4.3 => {outer_diameter:9, height:0.8},
+												5.3 => {outer_diameter:10, height:1.0},
+
+											}
+
+			super(args)		
+		end
+
+		def description
+			"Washer #{@args[:size]}, Material #{@args[:material]} #{@args[:surface]}"
+		end
+		
+		def show
+			washer = cylinder(d:@chart_din125[@size][:outer_diameter].to_f,h:@chart_din125[@size][:height].to_f)
+			washer-= cylinder(d:@size,h:@chart_din125[@size][:outer_diameter].to_f+0.2).translate(z:-0.1)
+			washer.color("Gainsboro")
+		end
+
+	end
 
 	class Nut < CrystalScad::Assembly
 		attr_accessor :height
