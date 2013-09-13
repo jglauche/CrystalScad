@@ -22,7 +22,7 @@ module CrystalScad
 	include CrystalScad::LinearBearing
 	
 	class Assembly
-	  def initialize(args)
+	  def initialize(args={})
 	    @args = args if @args == nil
       @@bom.add(description) unless args[:no_bom] == true
 	  end
