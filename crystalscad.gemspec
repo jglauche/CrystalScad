@@ -12,7 +12,8 @@ Gem::Specification.new do |gem|
   gem.homepage    = "http://github.com/Joaz/CrystalScad"
   gem.summary     = %q{Generate OpenSCAD scripts with ruby}
   gem.description = %q{Inspired by SolidPython, based on RubyScad}
-
+		
+	gem.license 		= 'GPL-3'
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
