@@ -91,7 +91,7 @@ module CrystalScad
 			res += self.to_rubyscad.to_s+ "\n"
 			res
 		end
-		alias :output :walk_tree		
+		alias :scad_output :walk_tree		
 		
 		def to_rubyscad
 			""
