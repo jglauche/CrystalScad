@@ -21,6 +21,55 @@ module CrystalScad
 	include CrystalScad::Hardware
 	include CrystalScad::LinearBearing
 	
+	class Assembly
+	  def initialize(args)
+	    @args = args if @args == nil
+      @@bom.add(description) unless args[:no_bom] == true
+	  end
+	  
+	  def description
+	    "No description set for Class #{self.class.to_s}"
+	  end
+	  
+	  def show
+	    ScadObject.new
+	  end
+	  
+	  def output
+	    show
+	  end
+	  
+	  def walk_tree
+	    return output.walk_tree
+	  end
+	  
+	  def +(args)
+	    return self.output+args
+	  end
+
+	  def -(args)
+	    return self.output-args
+	  end
+
+	  def *(args)
+	    return self.output*args
+	  end
+	  
+	  def translate(args)
+	    return self.output.translate(args)
+	  end 
+
+	  def mirror(args)
+	    return self.output.mirror(args)
+	  end 
+
+	  def rotate(args)
+	    return self.output.rotate(args)
+	  end 
+
+	end
+	
+	
 	class ScadObject
 		attr_accessor :args		
     attr_accessor :transformations
@@ -192,11 +241,9 @@ module CrystalScad
 		def format_block(output_str)
 			return output_str
 		end
-
-
 	end
 
-	
+  	
 	def csg_operation(operation, code1, code2)
 		ret = "#{operation}(){"
 		ret +=code1
@@ -226,7 +273,7 @@ module CrystalScad
 	
 	# Fixme: currently just accepting named colors
 	def color(args)
-		ret = "color(\"#{args}\"){"
+	  ret = "color(\"#{args}\"){"
 		ret +=self.walk_tree
 		ret +="}"
 		return TransformedObject.new(ret)		
