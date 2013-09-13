@@ -67,6 +67,11 @@ module CrystalScad
 	    return self.output.rotate(args)
 	  end 
 
+	  def scad_output()
+	    return self.output.scad_output
+	  end 
+
+
 	end
 	
 	
