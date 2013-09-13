@@ -13,9 +13,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>.
 
-module CrystalScad::Hardware
+module CrystalScad::Hardware 
 
-	class Bolt	
+	class Bolt	< CrystalScad::Assembly
 		def initialize(size,length, type="912", material="8.8", surface="zinc plated")
 			@size = size
 			@length = length
@@ -32,6 +32,10 @@ module CrystalScad::Hardware
 
 		def output
 			return bolt_912
+		end
+
+		def show
+			return bolt_912(0)
 		end
 
 		# currently only din912	
@@ -74,7 +78,7 @@ module CrystalScad::Hardware
 	end
 
 
-	class Nut
+	class Nut < CrystalScad::Assembly
 		attr_accessor :height
 		def initialize(size,args={})
 			@size = size
@@ -123,7 +127,7 @@ module CrystalScad::Hardware
 	end
 
 
-	class TSlot
+	class TSlot < CrystalScad::Assembly
 		# the code in this class is based on code by Nathan Zadoks 	
 		# taken from https://github.com/nathan7/scadlib
 		# Ported to CrystalScad by Joachim Glauche

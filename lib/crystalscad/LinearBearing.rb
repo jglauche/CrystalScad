@@ -15,7 +15,7 @@
 
 module CrystalScad::LinearBearing
 
-  class Lm_uu
+  class Lm_uu < CrystalScad::Assembly
           
     def initialize(args={inner_diameter:10})    
       @args = args
