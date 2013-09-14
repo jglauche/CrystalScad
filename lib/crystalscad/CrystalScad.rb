@@ -194,7 +194,7 @@ module CrystalScad
 			@children.each do |child|	
 				begin
 					ret +=child.walk_tree
-				rescue NoMethodError
+				rescue NoMethodError	
 				end
 			end
 			ret +="}"			
@@ -246,7 +246,7 @@ module CrystalScad
 	end
 	
 	def hull(*parts)
-	  Hull.new(parts)	  
+	  Hull.new(*parts)	  
 	end
 
 	class CSGModifier < Primitive
