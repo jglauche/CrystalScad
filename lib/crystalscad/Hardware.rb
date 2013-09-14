@@ -184,8 +184,8 @@ module CrystalScad::Hardware
 			end
 			@@bom.add(description) unless args[:no_bom] == true
 
-			return TransformedObject.new(single_profile.output)	 if @args[:configuration] == 1 		
-			return TransformedObject.new(multi_profile.output)	 				
+			return single_profile	 if @args[:configuration] == 1 		
+			return multi_profile	 				
 		end
 		
     alias :show :output
@@ -232,7 +232,7 @@ module CrystalScad::Hardware
 		alias tslot_output output
 
 		def output(length=nil)
-			tslot_output(length)-bolts		
+			tslot_output(length)-bolts()		
 		end
 
 		def show(length=nil)
@@ -240,7 +240,7 @@ module CrystalScad::Hardware
 		end
 
 		def bolts
-			bolt = ScadObject.new
+			bolt = CrystalScadObject.new
 			return bolt if @args[:holes] == nil
 		
 			if @args[:holes].include?("front")

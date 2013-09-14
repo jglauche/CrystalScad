@@ -22,7 +22,7 @@ module CrystalScad
 	include CrystalScad::LinearBearing
 	
 	
-	class ScadObject
+	class CrystalScadObject
 		attr_accessor :args		
     attr_accessor :transformations
 		def initialize(*args)
@@ -51,7 +51,7 @@ module CrystalScad
 	
 	end
 
-	class Primitive < ScadObject
+	class Primitive < CrystalScadObject
 
 		def rotate(args)
 		  # always make sure we have a z parameter; otherwise RubyScad will produce a 2-dimensional output
@@ -94,7 +94,7 @@ module CrystalScad
 	
 	end
 
-	class Transformation < ScadObject
+	class Transformation < CrystalScadObject
 	end
 
 	class Rotate < Transformation
@@ -132,7 +132,6 @@ module CrystalScad
 	  def initialize(*args)
 	    super(args)
 	    @x,@y,@z = args[0][:size].map{|l| l.to_f}
-    
 	  end
 	
 		def to_rubyscad
@@ -195,48 +194,130 @@ module CrystalScad
 		end
 	end
 
-  	
-	def csg_operation(operation, code1, code2)
-		ret = "#{operation}(){"
-		ret +=code1
-		ret +=code2
-		ret +="}"
-		return TransformedObject.new(ret)
+
+	class CSGModelling < Primitive
+		def initialize(*list)
+			@transformations = []
+			@children = list
+		end
+
+		def to_rubyscad
+			@children ||= []			
+			ret = "#{@operation}(){"
+			@children.each do |child|	
+				begin
+					ret +=child.walk_tree
+				rescue NoMethodError
+				end
+			end
+			ret +="}"			
+		end
+	end	
+
+	class Union < CSGModelling		
+		def initialize(*list)
+			@operation = "union"
+			super(*list)
+		end
 	end
+
+	class Difference < CSGModelling		
+		def initialize(*list)
+			@operation = "difference"
+			super(*list)
+		end
+	end
+
+	class Intersection < CSGModelling		
+		def initialize(*list)
+			@operation = "intersection"
+			super(*list)
+		end
+	end
+
+	class Hull < CSGModelling		
+		def initialize(*list)
+			@operation = "hull"
+			super(*list)
+		end
+	end
+
 
 	def +(args)	
 		return args	 if self == nil		
-		csg_operation("union",self.walk_tree,args.walk_tree)
+		Union.new(self,args)
 	end
 
 	def -(args)
 		return args	 if self == nil		
-		csg_operation("difference",self.walk_tree,args.walk_tree)		
+		Difference.new(self,args)
 	end
 	
 	def *(args)
 		return args	 if self == nil		
-		csg_operation("intersection",self.walk_tree,args.walk_tree)		
+		Intersection.new(self,args)
 	end
 	
-	def hull(part1,part2)
-	  csg_operation("hull",part1.walk_tree,part2.walk_tree)		  
+	def hull(*parts)
+	  Hull.new(parts)	  
+	end
+
+	class CSGModifier < Primitive
+		def initialize(object, attributes)
+			@transformations = []
+			@child = object
+			@attributes = attributes
+		end
+
+		def to_rubyscad		
+			ret = "#{@operation}(#{@attributes}){"
+			begin
+				ret += @child.walk_tree
+			rescue NoMethodError
+			end
+			ret +="}"			
+		end
+	end	
+
+	class Color < CSGModifier
+		def initialize(object, attributes)
+			@operation = "color"
+			if attributes.kind_of? String
+				attributes = "\"#{attributes}\""			
+			elsif attributes.kind_of? Hash
+				# FIXME
+			end
+			
+			super(object, attributes)
+		end
 	end
 	
-	# Fixme: currently just accepting named colors
+	class LinearExtrude < CSGModifier
+		def initialize(object, attributes)
+			@operation = "linear_extrude"
+			super(object, attributes)
+		end
+	end
+
+	class RotateExtrude < CSGModifier
+		def initialize(object, attributes)
+			@operation = "rotate_extrude"
+			super(object, attributes)
+		end
+	end
+	
 	def color(args)
-	  ret = "color(\"#{args}\"){"
-		ret +=self.walk_tree
-		ret +="}"
-		return TransformedObject.new(ret)		
+		return Color.new(self,args)		
 	end
 
 	def linear_extrude(args)
 		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
-		ret = "linear_extrude(#{args}){"
-		ret +=self.walk_tree
-		ret +="}"
-		return TransformedObject.new(ret)				
+		return LinearExtrude.new(self,args)				
+	end
+
+	def rotate_extrude(args)
+		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
+		return RotateExtrude.new(self,args)				
 	end
 	
 
