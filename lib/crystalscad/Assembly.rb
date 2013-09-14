@@ -1,5 +1,7 @@
 module CrystalScad
 	class Assembly
+		attr_accessor :height
+
 	  def initialize(args={})
 	    @args = args if @args == nil
       @@bom.add(description) unless args[:no_bom] == true

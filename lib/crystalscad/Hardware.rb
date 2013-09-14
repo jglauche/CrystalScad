@@ -97,7 +97,7 @@ module CrystalScad::Hardware
 												5.3 => {outer_diameter:10, height:1.0},
 
 											}
-
+			@height = @chart_din125[@size][:height]
 			super(args)		
 		end
 

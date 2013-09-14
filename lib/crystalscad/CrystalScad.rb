@@ -238,6 +238,21 @@ module CrystalScad
 		ret +="}"
 		return TransformedObject.new(ret)				
 	end
+	
+
+	#	Stacks parts along the Z axis
+	# works on all Assemblies that have a @height definition
+	def stack(args={}, *parts)
+		args[:method] ||= "show"
+		args[:additional_spacing] ||= 0
+		@assembly = nil		
+		z = 0
+		parts.each do |part|
+			@assembly += (part.send args[:method]).translate(z:z)
+			z+= part.height	+ args[:additional_spacing]
+		end
+		@assembly
+	end
 
 end
 
