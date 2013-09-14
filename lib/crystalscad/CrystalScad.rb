@@ -52,6 +52,7 @@ module CrystalScad
 	end
 
 	class Primitive < CrystalScadObject
+		attr_accessor :children		
 
 		def rotate(args)
 		  # always make sure we have a z parameter; otherwise RubyScad will produce a 2-dimensional output
@@ -79,20 +80,6 @@ module CrystalScad
 		end
 
   end
-
-	class TransformedObject < Primitive
-		attr_accessor :scad
-		def initialize(string)
-			@scad = string
-			@transformations = []
-		end		
-	
-		def to_rubyscad
-			return @scad		
-		end
-		alias :output :walk_tree
-	
-	end
 
 	class Transformation < CrystalScadObject
 	end
@@ -265,15 +252,18 @@ module CrystalScad
 	class CSGModifier < Primitive
 		def initialize(object, attributes)
 			@transformations = []
-			@child = object
+			@children = [object]
 			@attributes = attributes
 		end
 
 		def to_rubyscad		
 			ret = "#{@operation}(#{@attributes}){"
-			begin
-				ret += @child.walk_tree
-			rescue NoMethodError
+			@children ||= []			
+			@children.each do |child|	
+				begin
+					ret +=child.walk_tree
+				rescue NoMethodError
+				end
 			end
 			ret +="}"			
 		end
@@ -333,6 +323,35 @@ module CrystalScad
 			z+= part.height	+ args[:additional_spacing]
 		end
 		@assembly
+	end
+
+	def get_position_rec(obj, level=0)
+		position = [0,0,0]
+		return position if obj == nil
+		obj.each do |o|
+			o.transformations.each do |t|
+				if t.class == Translate
+					t.args[:x] ||= 0
+					t.args[:y] ||= 0
+					t.args[:z] ||= 0
+					position[0] += t.args[:x]
+					position[1] += t.args[:y]
+					position[2] += t.args[:z]
+				end
+			end		
+	#		puts "  " * level + position.inspect
+			x,y,z = get_position_rec(o.children,level+1)
+			position[0] += x
+			position[1] += y
+			position[2] += z
+		end
+		return position
+	end
+
+	#	this is experimental, does only work on simple parts. example:
+	# The bolt head is on the -z plane, this will move it to "zero"
+	def position(obj)
+		get_position_rec(obj.children)
 	end
 
 end
