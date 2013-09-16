@@ -295,6 +295,14 @@ module CrystalScad
 			super(object, attributes)
 		end
 	end
+
+	class Projection < CSGModifier
+		def initialize(object, attributes)
+			@operation = "projection"
+			super(object, attributes)
+		end
+	end
+
 	
 	def color(args)
 		return Color.new(self,args)		
@@ -309,6 +317,12 @@ module CrystalScad
 		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
 		return RotateExtrude.new(self,args)				
 	end
+
+	def projection(args={})
+		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
+		return Projection.new(self,args)				
+	end
+
 	
 
 	#	Stacks parts along the Z axis
