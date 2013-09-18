@@ -176,6 +176,7 @@ module CrystalScad::Hardware
 			@args[:configuration] ||= 1
 			@args[:gap] ||= 8.13
 			@args[:thickness] ||= 2.55
+			@args[:simple] ||= false
 		end
 
 		def output(length=nil)
@@ -195,19 +196,22 @@ module CrystalScad::Hardware
 		end
 
 		def single_profile
-			start=@args[:thickness].to_f/Math.sqrt(2);
-		 
-			gap = @args[:gap]
-			thickness = @args[:thickness]
-			size= @args[:size]
-			profile = square(size:gap+thickness,center:true);
-		  (0..3).each{|d|
-		      profile+=polygon(points:[[0,0],[0,start],[size/2-thickness-start,size/2-thickness],[gap/2,size/2-thickness],[gap/2,size/2],[size/2,size/2],[size/2,gap/2],[size/2-thickness,gap/2],[size/2-thickness,size/2-thickness-start],[start,0]]).rotate(z:d*90)
-		  }
-			profile-=circle(r:gap/2,center:true);
-			profile=profile.translate(x:size/2,y:size/2);
-		
-			return profile.linear_extrude(height:@args[:length],convexity:2)		
+		  if @args[:simple] == true
+		    return cube([@args[:size],@args[:size],@args[:length]])
+		  else
+			  start=@args[:thickness].to_f/Math.sqrt(2);
+		   
+			  gap = @args[:gap]
+			  thickness = @args[:thickness]
+			  size= @args[:size]
+			  profile = square(size:gap+thickness,center:true);
+		    (0..3).each{|d|
+		        profile+=polygon(points:[[0,0],[0,start],[size/2-thickness-start,size/2-thickness],[gap/2,size/2-thickness],[gap/2,size/2],[size/2,size/2],[size/2,gap/2],[size/2-thickness,gap/2],[size/2-thickness,size/2-thickness-start],[start,0]]).rotate(z:d*90)
+		    }
+			  profile-=circle(r:gap/2,center:true);
+			  profile=profile.translate(x:size/2,y:size/2);
+        return profile.linear_extrude(height:@args[:length],convexity:2)	
+      end				
 		end
 
 		def multi_profile
