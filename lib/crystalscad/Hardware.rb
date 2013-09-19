@@ -37,14 +37,34 @@ module CrystalScad::Hardware
 		end
 
 		def output
-			return bolt_912(@args[:additional_length],@args[:additional_diameter])
+			return bolt_912(@args[:additional_length],@args[:additional_diameter]) if @args[:type] == "912"
+			return bolt_7380(@args[:additional_length],@args[:additional_diameter]) if @args[:type] == "7380"
 		end
 
 		def show
-			return bolt_912(0,0)
-		end
+			return bolt_912(0,0) if @args[:type] == "912"
+			return bolt_7380(0,0) if @args[:type] == "7380"
+		end 
+  
+    # ISO 7380
+  	def bolt_7380(additional_length=0, addtional_diameter=0)
+	    chart_iso7380 = {
+	                    3 => {head_dia:5.7,head_length:1.65},
+	                    4 => {head_dia:7.6,head_length:2.2},
+	                    5 => {head_dia:9.5,head_length:2.75},
+	                    6 => {head_dia:10.5,head_length:3.3},
+	                    8 => {head_dia:14,head_length:4.4},
+	                    10=> {head_dia:17.5,head_length:5.5},
+	                    12=> {head_dia:21,head_length:6.6},
+	    
+	    
+	    }
+	  	res = cylinder(d1:chart_iso7380[@size][:head_dia]/2.0,d2:chart_iso7380[@size][:head_dia],h:chart_iso7380[@size][:head_length]).translate(z:-chart_iso7380[@size][:head_length]).color("Gainsboro") 
+      total_length = @length + additional_length
+      res+= cylinder(d:@size+addtional_diameter, h:total_length).color("DarkGray")		
+	  end
 
-		# currently only din912	
+    # DIN 912
 		def bolt_912(additional_length=0, addtional_diameter=0)
 			
 	
