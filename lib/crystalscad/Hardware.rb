@@ -36,7 +36,7 @@ module CrystalScad::Hardware
 		  norm = ""
 		  if ["912"].include? @args[:type]
 		    norm = "DIN"
-		  elsif ["7380".include? @args[:type]
+		  elsif ["7380"].include? @args[:type]
 		    norm = "ISO"
 		  end
 		  
