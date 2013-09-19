@@ -33,7 +33,14 @@ module CrystalScad::Hardware
 		end
 
 		def description
-			"M#{@size}x#{@length} Bolt, DIN #{@args[:type]}, #{@args[:material]} #{@args[:surface]}"
+		  norm = ""
+		  if ["912"].include? @args[:type]
+		    norm = "DIN"
+		  elsif ["7380".include? @args[:type]
+		    norm = "ISO"
+		  end
+		  
+			"M#{@size}x#{@length} Bolt, #{norm} #{@args[:type]}, #{@args[:material]} #{@args[:surface]}"
 		end
 
 		def output
