@@ -22,7 +22,7 @@ Features
 
 Real World Example:
 ===========
-https://github.com/Joaz/bulldozer/blob/master/new_model/bulldozer.rb
+https://github.com/Joaz/bulldozer/blob/master/
 
 
 
