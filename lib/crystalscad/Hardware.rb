@@ -23,7 +23,7 @@ module CrystalScad::Hardware
 			@args[:surface] ||= "zinc plated"
 			# options for output only:	
 			@args[:additional_length] ||= 0
-			@args[:additional_diameter] ||= 0.2 
+			@args[:additional_diameter] ||= 0.3 
 
 			@size = size
 			@length = length
@@ -171,7 +171,7 @@ module CrystalScad::Hardware
 			@height = chart_934[@size][:height]
 		end
 
-		def output(margin=0.2)
+		def output(margin=0.3)
 			return nut_934(margin)
 		end
 
