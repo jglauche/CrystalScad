@@ -120,6 +120,11 @@ module CrystalScad
 	    super(args)
 	    @x,@y,@z = args[0][:size].map{|l| l.to_f}
 	  end
+
+		def center_xy
+			@transformations << Translate.new({x:-@x/2,y:-@y/2})
+			self
+		end
 	
 		def to_rubyscad
 			return RubyScadBridge.new.cube(@args)		
