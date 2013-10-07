@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.authors     = ["Joachim Glauche"]
   gem.email       = ["webmaster@joaz.de"]
   gem.homepage    = "http://github.com/Joaz/CrystalScad"
-  gem.summary     = %q{Generate OpenSCAD scripts with ruby}
+  gem.summary     = %q{CrystalScad is a framework for programming OpenScad models in Ruby}
   gem.description = %q{Inspired by SolidPython, based on RubyScad}
 		
 	gem.license 		= 'GPL-3'
@@ -21,5 +21,7 @@ Gem::Specification.new do |gem|
 	
 	gem.required_ruby_version = ">= 1.9.3"
 	gem.requirements	<< "rubyscad"
+	gem.requirements	<< "require_all"
+	
 end
 

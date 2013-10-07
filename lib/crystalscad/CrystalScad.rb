@@ -48,6 +48,13 @@ module CrystalScad
 		def to_rubyscad
 			""
 		end
+		
+		def save(filename,start_text=nil)
+      file = File.open(filename,"w")
+      file.puts start_text unless start_text == nil
+      file.puts scad_output
+      file.close		
+		end
 	
 	end
 
@@ -131,9 +138,14 @@ module CrystalScad
 		end	
 	end
 
-	def cube(args)
+	def cube(args={})
 		if args.kind_of? Array
 			args = {size:args}
+		elsif args.kind_of? Hash
+		  args[:x] ||= 0
+		  args[:y] ||= 0
+		  args[:z] ||= 0
+		  args = {size:[args[:x],args[:y],args[:z]]}		
 		end	
 		Cube.new(args)	
 	end
