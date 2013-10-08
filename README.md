@@ -37,7 +37,7 @@ CSG Modeling:
   res *= cylinder(d:10,h:10)
   
 Hull:
-  res = hull(cylinder(d:10,h:10),cube([20,10,10].translate(x:10)))
+  res = hull(cylinder(d:10,h:10).cube([20,10,10].translate(x:10)))
 
 Center cubes in X/Y direction only:
   cube([10,10,10]).center_xy # note: does only work on cubes and must be put before any transformations
@@ -72,7 +72,7 @@ A few tips:
   needs to be ported to
   cylinder(r:11.0/2,h:10)
   or
-  cylidner(d:11,h:10)
+  cylinder(d:11,h:10)
   
 
 
