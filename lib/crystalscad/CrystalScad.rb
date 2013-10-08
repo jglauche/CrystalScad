@@ -132,6 +132,22 @@ module CrystalScad
 			@transformations << Translate.new({x:-@x/2,y:-@y/2})
 			self
 		end
+
+		def center_x
+			@transformations << Translate.new({x:-@x/2})
+			self
+		end
+
+		def center_y
+			@transformations << Translate.new({y:-@y/2})
+			self
+		end
+
+		def center_z
+			@transformations << Translate.new({z:-@z/2})
+			self
+		end
+
 	
 		def to_rubyscad
 			return RubyScadBridge.new.cube(@args)		
@@ -385,6 +401,13 @@ module CrystalScad
 		get_position_rec(obj.children)
 	end
 
+  # produces a hull() of 2 cylidners
+  # accepts d,r,h for cylinder options
+  # l long slot length
+  def long_slot(args)
+    hull(cylinder(d:args[:d],r:args[:r],h:args[:h]),cylinder(d:args[:d],r:args[:r],h:args[:h]).translate(x:args[:l]))    
+  end
+  
 end
 
 

@@ -41,6 +41,13 @@ Hull:
 
 Center cubes in X/Y direction only:
   cube([10,10,10]).center_xy # note: does only work on cubes and must be put before any transformations
+
+Also implemented: center_x, center_y, center_z  
+  
+
+Long slots:   
+  # produces a hull of two cylinders, 14mm apart
+  long_slot(d:4.4,h:10,l:14)  
   
 
 
