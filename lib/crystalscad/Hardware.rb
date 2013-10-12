@@ -167,8 +167,21 @@ module CrystalScad::Hardware
 									 12 => {side_to_side:19,height:10},
 
 									}
+			# for securing nuts
+			chart_985 = {
+									 3 => {height:4},
+									 4 => {height:5},										
+									 5 => {height:5},										
+									 6 => {height:6},										
+									}
+
 			@s = chart_934[@size][:side_to_side]
 			@height = chart_934[@size][:height]
+
+			if @type == "985"
+				@height = chart_985[@size][:height]			
+			end
+	
 		end
 
 		def output(margin=0.3)
