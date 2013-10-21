@@ -9,13 +9,6 @@ include CrystalScad
 assembly = Example.new.show
 subassembly = nil
 
-def save(file,output,start_text=nil)
-  file = File.open(file,"w")
-  file.puts start_text unless start_text == nil
-  file.puts output
-  file.close
-end
-
 @@bom.save
 
 assembly.save(File.expand_path(__FILE__).gsub(".rb","")+".scad","$fn=64;") if assembly
