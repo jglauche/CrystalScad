@@ -20,8 +20,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 	
 	gem.required_ruby_version = ">= 1.9.3"
-	gem.requirements	<< "rubyscad"
-	gem.requirements	<< "require_all"
+	gem.add_runtime_dependency "rubyscad", ">= 1.0"
+	gem.add_runtime_dependency "require_all", ">= 1.3"
 	
 end
 
