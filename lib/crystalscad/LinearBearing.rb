@@ -73,4 +73,22 @@ module CrystalScad::LinearBearing
     
   end    
     
+  class Lm_luu < Lm_uu
+          
+    def initialize(args={inner_diameter:10})    
+      @args = args
+      @lm_uu = {
+              12 => {diameter:21, length:57},
+        
+      }
+      @shell_thickness = 1.1
+      @@bom.add(description) unless args[:no_bom] == true
+    end
+   
+    def description
+			"LM#{@args[:inner_diameter]}LUU (long) Linear bearing"
+		end  
+    
+  end
+
 end
