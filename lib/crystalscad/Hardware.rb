@@ -225,8 +225,8 @@ module CrystalScad::Hardware
 			end
 			@@bom.add(description) unless args[:no_bom] == true
 
-			return single_profile	 if @args[:configuration] == 1 		
-			return multi_profile	 				
+			return single_profile.color("Silver")	 if @args[:configuration] == 1 		
+			return multi_profile.color("Silver")	 				
 		end
 		
     alias :show :output
