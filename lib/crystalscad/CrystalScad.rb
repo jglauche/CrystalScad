@@ -33,7 +33,6 @@ module CrystalScad
 			end		
 		end		
 
-
 		def walk_tree
 			res = ""			
 			
@@ -265,7 +264,6 @@ module CrystalScad
 		end
 	end
 
-
 	def +(args)	
 		return args	 if self == nil		
 		Union.new(self,args)
@@ -283,6 +281,22 @@ module CrystalScad
 	
 	def hull(*parts)
 	  Hull.new(*parts)	  
+	end
+
+
+	class Import < Primitive
+		def initialize(filename)
+			@transformations = []
+			@filename = filename		
+		end		
+		
+		def to_rubyscad	
+			return RubyScadBridge.new.import("\""+@filename.to_s+"\"") # apparently the quotes get lost otherwise
+		end	
+	end
+
+	def import(filename)
+		Import.new(filename)
 	end
 
 	class CSGModifier < Primitive
