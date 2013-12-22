@@ -12,12 +12,16 @@ module CrystalScad
 	  end
 	  
 	  def show
-	    ScadObject.new
+	    part(true)
 	  end
 	  
 	  def output
-	    show
+	    part(false)
 	  end
+
+		def part(show=false)
+			CrystalScadObject.new
+		end
 	  
 	  def walk_tree
 	    return output.walk_tree
@@ -51,7 +55,12 @@ module CrystalScad
 	    return self.output.scad_output
 	  end 
 
+	end
 
+	class Printed < Assembly
+	  def description
+	    "Printed part #{self.class.to_s}"
+	  end		
 	end
 end
 
