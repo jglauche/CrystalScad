@@ -20,7 +20,8 @@ module CrystalScad
 	include CrystalScad::BillOfMaterial
 	include CrystalScad::Hardware
 	include CrystalScad::LinearBearing
-	
+	include CrystalScad::Gears
+
 	
 	class CrystalScadObject
 		attr_accessor :args		
