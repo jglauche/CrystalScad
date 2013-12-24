@@ -21,6 +21,7 @@ module CrystalScad
 	include CrystalScad::Hardware
 	include CrystalScad::LinearBearing
 	include CrystalScad::Gears
+	include CrystalScad::Bolthole
 
 	
 	class CrystalScadObject
@@ -267,12 +268,36 @@ module CrystalScad
 
 	def +(args)	
 		return args	 if self == nil		
-		Union.new(self,args)
+		if args.kind_of? Array
+			r = self			
+			args.each do |a|
+				if a.respond_to? :show
+					r = Union.new(r,a.show)	
+				else
+					r = Union.new(r,a)	
+				end
+			end
+			r
+		else
+			Union.new(self,args)
+		end		
 	end
 
 	def -(args)
 		return args	 if self == nil		
-		Difference.new(self,args)
+		if args.kind_of? Array
+			r = self			
+			args.each do |a|
+				if a.respond_to? :output
+					r = Difference.new(r,a.output)	
+				else
+					r = Difference.new(r,a)	
+				end
+			end
+			r
+		else
+			Difference.new(self,args)
+		end
 	end
 	
 	def *(args)

@@ -16,6 +16,8 @@
 module CrystalScad::Hardware 
 
 	class Bolt	< CrystalScad::Assembly
+		attr_accessor :transformations
+
 		def initialize(size,length,args={})
 			@args = args
 			@args[:type] ||= "912"
@@ -27,7 +29,7 @@ module CrystalScad::Hardware
 
 			@size = size
 			@length = length
-
+			@transformations ||= []
 
 			@@bom.add(description)
 		end
@@ -44,14 +46,22 @@ module CrystalScad::Hardware
 		end
 
 		def output
-			return bolt_912(@args[:additional_length],@args[:additional_diameter]) if @args[:type] == "912"
-			return bolt_7380(@args[:additional_length],@args[:additional_diameter]) if @args[:type] == "7380"
+			return transform(bolt_912(@args[:additional_length],@args[:additional_diameter])) if @args[:type] == "912"
+			return transform(bolt_7380(@args[:additional_length],@args[:additional_diameter])) if @args[:type] == "7380"
 		end
 
 		def show
-			return bolt_912(0,0) if @args[:type] == "912"
-			return bolt_7380(0,0) if @args[:type] == "7380"
+			return transform(bolt_912(0,0)) if @args[:type] == "912"
+			return transform(bolt_7380(0,0)) if @args[:type] == "7380"
 		end 
+
+		def transform(obj)	
+			@transformations.each do |t|
+				obj.transformations << t
+			end
+			
+			return obj
+		end
   
     # ISO 7380
   	def bolt_7380(additional_length=0, addtional_diameter=0)
