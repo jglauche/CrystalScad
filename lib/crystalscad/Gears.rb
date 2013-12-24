@@ -29,14 +29,11 @@ module CrystalScad::Gears
       @height = args[:height] || 3.0
 			@hub_dia = args[:hub_dia] || 0.0
 			@hub_height = args[:hub_height] || 0.0
+			@output_margin_dia = args[:output_margin_dia] || 2
+			@output_margin_height = args[:output_margin_height] || 1
     end 
     
     def show
-      output
-    end
-    
-    # very simple output
-    def output
       res = cylinder(d:@module*@teeth,h:@height)
 
 			if @hub_height.to_f > 0 && @hub_dia.to_f > 0
@@ -48,6 +45,15 @@ module CrystalScad::Gears
       end
       res.color("darkgray")
     end
+
+		def output
+			res = cylinder(d:@module*@teeth+@output_margin_dia,h:@height+@output_margin_height)
+			if @hub_height.to_f > 0 && @hub_dia.to_f > 0
+				res += cylinder(d:@hub_dia+@output_margin_dia,h:@hub_height+@output_margin_height).translate(z:@height+@output_margin_height)
+			end   
+
+			res   
+		end
     
     def distance_to(other_gear)
       if @module != other_gear.module
