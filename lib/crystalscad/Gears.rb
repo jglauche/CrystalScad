@@ -20,13 +20,15 @@ module CrystalScad::Gears
     # this library is to be used to easily work with gears and their distances to each other
     # TODO: maybe at some point port the publicDomainGear.scad into it?
 
-    attr_reader :module, :teeth
+    attr_reader :module, :teeth, :height, :hub_dia, :hub_height
     
     def initialize(args={})
       @module = args[:module] || 1.0
       @teeth = args[:teeth] || 1.0
       @bore = args[:bore] || 0.0
       @height = args[:height] || 3.0
+			@hub_dia = args[:hub_dia] || 0.0
+			@hub_height = args[:hub_height] || 0.0
     end 
     
     def show
@@ -36,10 +38,15 @@ module CrystalScad::Gears
     # very simple output
     def output
       res = cylinder(d:@module*@teeth,h:@height)
-      if @bore.to_f > 0.0
-        res -= cylinder(d:@bore,h:@height+0.2).translate(z:-0.1)
+
+			if @hub_height.to_f > 0 && @hub_dia.to_f > 0
+				res += cylinder(d:@hub_dia,h:@hub_height).translate(z:@height)
+			end      
+
+			if @bore.to_f > 0.0
+        res -= cylinder(d:@bore,h:@height+@hub_height+0.2).translate(z:-0.1)
       end
-      res
+      res.color("darkgray")
     end
     
     def distance_to(other_gear)
