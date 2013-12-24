@@ -13,7 +13,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>.
 
-module CrystalScad::Gears
+module CrystalScad::BoltHoles
 	class BoltHole
 		# I would name this Thread but that's already taken by something else
 
