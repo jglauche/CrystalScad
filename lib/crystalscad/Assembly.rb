@@ -19,8 +19,15 @@ module CrystalScad
 
 	  def initialize(args={})
 	    @args = args if @args == nil
-      @@bom.add(description) unless args[:no_bom] == true
+      add_to_bom
 	  end
+
+		def add_to_bom
+			if !@bom_added				
+				@@bom.add(description) unless @args[:no_bom] == true
+				@bom_added = true
+			end
+		end		
 	  
 	  def description
 	    "No description set for Class #{self.class.to_s}"

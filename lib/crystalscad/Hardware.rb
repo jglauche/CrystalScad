@@ -30,8 +30,6 @@ module CrystalScad::Hardware
 			@size = size
 			@length = length
 			@transformations ||= []
-
-			@@bom.add(description)
 		end
 
 		def description
@@ -46,11 +44,13 @@ module CrystalScad::Hardware
 		end
 
 		def output
+			add_to_bom
 			return transform(bolt_912(@args[:additional_length],@args[:additional_diameter])) if @args[:type] == "912"
 			return transform(bolt_7380(@args[:additional_length],@args[:additional_diameter])) if @args[:type] == "7380"
 		end
 
 		def show
+			add_to_bom
 			return transform(bolt_912(0,0)) if @args[:type] == "912"
 			return transform(bolt_7380(0,0)) if @args[:type] == "7380"
 		end 
@@ -135,7 +135,6 @@ module CrystalScad::Hardware
 
 											}
 			@height = @chart_din125[@size][:height]
-			super(args)		
 		end
 
 		def description
@@ -143,6 +142,7 @@ module CrystalScad::Hardware
 		end
 		
 		def show
+			add_to_bom
 			washer = cylinder(d:@chart_din125[@size][:outer_diameter].to_f,h:@chart_din125[@size][:height].to_f)
 			washer-= cylinder(d:@size,h:@chart_din125[@size][:outer_diameter].to_f+0.2).translate(z:-0.1)
 			washer.color("Gainsboro")
@@ -158,7 +158,7 @@ module CrystalScad::Hardware
 			@material = args[:material] ||= "8.8"
 			@surface = args[:surface] ||= "zinc plated"
 
-			@@bom.add(description) unless args[:no_bom] == true
+			@args = args
 			prepare_data
 		end
 
@@ -194,11 +194,13 @@ module CrystalScad::Hardware
 	
 		end
 
-		def output(margin=0.3)
+		def output(margin=0.3)	
+			add_to_bom
 			return nut_934(margin)
 		end
 
 		def show
+			add_to_bom
 			return nut_934
 		end
 

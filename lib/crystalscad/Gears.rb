@@ -49,7 +49,7 @@ module CrystalScad::Gears
 		def output
 			res = cylinder(d:@module*@teeth+@output_margin_dia,h:@height+@output_margin_height)
 			if @hub_height.to_f > 0 && @hub_dia.to_f > 0
-				res += cylinder(d:@hub_dia+@output_margin_dia,h:@hub_height+@output_margin_height).translate(z:@height+@output_margin_height)
+				res += cylinder(d:@hub_dia+@output_margin_dia,h:@hub_height+@output_margin_height).translate(z:@height)
 			end   
 
 			res   
