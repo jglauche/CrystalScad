@@ -129,11 +129,14 @@ module CrystalScad::Hardware
 			@args[:material] ||= "steel"
 			@args[:surface] ||= "zinc plated"			
 	
-			# FIXME: check 8.4 washer size
 			@chart_din125 = { 3.2 => {outer_diameter:7, height:0.5},
- 											  4.3 => {outer_diameter:9, height:0.8},
+												3.7 => {outer_diameter:8, height:0.5}, 											  
+												4.3 => {outer_diameter:9, height:0.8},
 												5.3 => {outer_diameter:10, height:1.0},
-												8.4 => {outer_diameter:16, height:1.5},
+												6.4 => {outer_diameter:12, height:1.6},
+												8.4 => {outer_diameter:16, height:1.6},
+												10.5 => {outer_diameter:20, height:2.0},
+												13.0 => {outer_diameter:24, height:2.5},
 
 											}
 			if @chart_din125[@size] == nil
