@@ -128,13 +128,21 @@ module CrystalScad::Hardware
 			@args[:type] ||= "125"
 			@args[:material] ||= "steel"
 			@args[:surface] ||= "zinc plated"			
-
+	
+			# FIXME: check 8.4 washer size
 			@chart_din125 = { 3.2 => {outer_diameter:7, height:0.5},
  											  4.3 => {outer_diameter:9, height:0.8},
 												5.3 => {outer_diameter:10, height:1.0},
+												8.4 => {outer_diameter:16, height:1.5},
 
 											}
+			if @chart_din125[@size] == nil
+				sizes = @chart_din125.map{|k,v| k}.sort.reverse.map{|s| s > @size ? size=s :nil}
+				@size = size
+			end			
 			@height = @chart_din125[@size][:height]
+			
+
 		end
 
 		def description
