@@ -178,6 +178,13 @@ module CrystalScad
 	end
 
 	def square(args)
+		if args.kind_of? Array
+			args = {size:args}
+		elsif args.kind_of? Hash
+		  args[:x] ||= 0
+		  args[:y] ||= 0
+		  args = {size:[args[:x],args[:y]]}		
+		end
 		Square.new(args)	
 	end
 
