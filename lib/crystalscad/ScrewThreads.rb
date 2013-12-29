@@ -13,8 +13,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>.
 
-module CrystalScad::BoltHoles
-	class BoltHole
+module CrystalScad::ScrewThreads
+	class ScrewThread
 		# I would name this Thread but that's already taken by something else
 
 		attr_accessor :x,:y,:z,:size, :depth
@@ -46,12 +46,12 @@ module CrystalScad::BoltHoles
 			return
 		end			
 		
-		# lets check if the obj2 responds to the bolt_holes_[face] method
+		# lets check if the obj2 responds to the threads_[face] method
 		
-		meth = "bolt_holes_#{face}"
+		meth = "threads_#{face}"
 		
 		unless obj2.respond_to?(meth)
-			raise "The object you're trying to get bolts holes from doesn't supply any on the face '#{face}'. Please add a method #{meth} to this object"				
+			raise "The object you're trying to get bolts from doesn't supply any on the face '#{face}'. Please add a method #{meth} to this object"				
 			return
 		end
 		holes = obj2.send(meth)		

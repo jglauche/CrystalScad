@@ -21,7 +21,7 @@ module CrystalScad
 	include CrystalScad::Hardware
 	include CrystalScad::LinearBearing
 	include CrystalScad::Gears
-	include CrystalScad::BoltHoles
+	include CrystalScad::ScrewThreads
 
 	
 	class CrystalScadObject
