@@ -39,7 +39,20 @@ module CrystalScad::ScrewThreads
 
 		# we need to know obj1 height (if not supplied by user)
 		height ||= args[:height]			
-		height ||= obj1.z rescue nil
+		case face
+			when "top"
+				height ||= obj1.z rescue nil
+			when "bottom"
+				height ||= obj1.z rescue nil
+			when "left"
+				height ||= obj1.x rescue nil
+			when "right"
+				height ||= obj1.x rescue nil
+			when "front"
+				height ||= obj1.y rescue nil
+			when "back"
+				height ||= obj1.y rescue nil
+		end		
 		height ||= obj1.height rescue nil
 		if height == nil
 			raise "the object we're substracting from doesn't have a height defined; please define manually"
@@ -56,6 +69,7 @@ module CrystalScad::ScrewThreads
 		end
 		holes = obj2.send(meth)		
 		
+		return if holes == nil
 
 		# let the user either define bolt_heights as integer, array or none (will be guessed)
 		if args[:bolt_height].kind_of? Array
@@ -78,10 +92,26 @@ module CrystalScad::ScrewThreads
 		ret = []
 		holes.each_with_index do |hole,i|
 			bolt = Bolt.new(hole.size,bolt_heights[i])
-
-		  # FIXME: this all currently only works for "top"	
-			bolt.transformations << Rotate.new(x:180)	
-			bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z+height})		
+			puts bolt_heights[i]
+		  case face
+				when "top"
+					bolt.transformations << Rotate.new(x:180)	
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z+height})		
+				when "bottom"
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z})		
+				when "left"
+					bolt.transformations << Rotate.new(y:90)						
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z+height})		
+				when "right"
+					bolt.transformations << Rotate.new(y:-90)						
+					bolt.transformations << Translate.new({x:hole.x+height,y:hole.y,z:hole.z})		
+				when "front"
+					bolt.transformations << Rotate.new(x:-90)						
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z})		
+				when "back"
+					bolt.transformations << Rotate.new(x:90)						
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y+height,z:hole.z})		
+			end
 
 			ret << bolt
 		end

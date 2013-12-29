@@ -15,7 +15,7 @@
 
 module CrystalScad
 	class Assembly
-		attr_accessor :height
+		attr_accessor :height,:x,:y,:z
 
 	  def initialize(args={})
 	    @args = args if @args == nil
