@@ -392,11 +392,19 @@ module CrystalScad
 	end
 
 	def linear_extrude(args)
+		if args[:h]	# rename to height
+			args[:height] = args[:h]
+			args.delete(:h)
+		end
 		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
 		return LinearExtrude.new(self,args)				
 	end
 
 	def rotate_extrude(args)
+		if args[:h]	# rename to height
+			args[:height] = args[:h]
+			args.delete(:h)
+		end
 		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
 		return RotateExtrude.new(self,args)				
 	end
