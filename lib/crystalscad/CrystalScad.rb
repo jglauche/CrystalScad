@@ -358,7 +358,13 @@ module CrystalScad
 			if attributes.kind_of? String
 				attributes = "\"#{attributes}\""			
 			elsif attributes.kind_of? Hash
-				# FIXME
+				attributes[:a] ||= 255
+				
+				r = attributes[:r].to_f / 255.0
+				g = attributes[:g].to_f / 255.0
+				b = attributes[:b].to_f / 255.0
+				a = attributes[:a].to_f / 255.0
+				attributes = [r,g,b,a]
 			end
 			
 			super(object, attributes)
