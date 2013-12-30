@@ -152,6 +152,10 @@ module CrystalScad
 			self
 		end
 
+		def center
+			@transformations << Translate.new({x:-@x/2,y:-@y/2,z:-@z/2})
+			self
+		end
 	
 		def to_rubyscad
 			return RubyScadBridge.new.cube(@args)		
@@ -169,6 +173,17 @@ module CrystalScad
 		end	
 		Cube.new(args)	
 	end
+	
+	class Sphere < Primitive
+		def to_rubyscad	
+			return RubyScadBridge.new.sphere(@args)		
+		end	
+	end
+
+	def sphere(args)
+		Sphere.new(args)		
+	end
+		
 
 	#	2d primitives
 	class Square < Primitive
