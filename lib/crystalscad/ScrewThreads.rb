@@ -92,7 +92,6 @@ module CrystalScad::ScrewThreads
 		ret = []
 		holes.each_with_index do |hole,i|
 			bolt = Bolt.new(hole.size,bolt_heights[i])
-			puts bolt_heights[i]
 		  case face
 				when "top"
 					bolt.transformations << Rotate.new(x:180)	
