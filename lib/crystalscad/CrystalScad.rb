@@ -97,13 +97,13 @@ module CrystalScad
 
 	class Rotate < Transformation
 		def to_rubyscad
-			return RubyScadBridge.new.rotate(@args)		
+			return RubyScadBridge.new.rotate(@args).gsub('"','')		
 		end	
 	end
 
  	class Translate < Transformation
 		def to_rubyscad
-			return RubyScadBridge.new.translate(@args)		
+			return RubyScadBridge.new.translate(@args).gsub('"','')		
 		end	
 	end
 	
