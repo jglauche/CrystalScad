@@ -59,7 +59,11 @@ module CrystalScad::Gears
         raise "You cannot use two gears with different gear modules."
         return
       end
-      return (@module * (@teeth + other_gear.teeth))/2.0
+      return (@module.to_f * (@teeth.to_f + other_gear.teeth.to_f))/2.0
+    end
+    
+    def ratio(other_gear)
+      @teeth.to_f / other_gear.teeth.to_f
     end
     
   end 
@@ -74,6 +78,8 @@ module CrystalScad::Gears
       @backlash = args[:backlash] || 0.0
       @twist = args[:twist] || 0.0
       @teeth_to_hide = args[:teeth_to_hide] || 0.0
+     
+      @rotation = args[:rotation] || 0.0 # rotation in teeth 
     end
   
     def show
@@ -106,7 +112,7 @@ module CrystalScad::Gears
       end
 
      res-= cylinder(h:@height+0.2,d:@bore).translate(z:-0.1)
-      
+     res.rotate(z:@rotation*360.0/@teeth)
     end
 
     def radians(a)
