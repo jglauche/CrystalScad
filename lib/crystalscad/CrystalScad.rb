@@ -75,6 +75,11 @@ module CrystalScad
 			self
 		end
 
+		def rotate_around(point,args)
+			x,y,z= point.x, point.y, point.z
+			self.translate(x:-x,y:-y,z:-z).rotate(args).translate(x:x,y:y,z:z)
+		end
+
 		def translate(args)
 			@transformations << Translate.new(args)		
 			self			
@@ -312,7 +317,7 @@ module CrystalScad
 			args.each do |a|
 				if a.respond_to? :output
 					r = Difference.new(r,a.output)	
-				else
+				else	
 					r = Difference.new(r,a)	
 				end
 			end

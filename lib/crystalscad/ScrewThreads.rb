@@ -17,7 +17,7 @@ module CrystalScad::ScrewThreads
 	class ScrewThread
 		# I would name this Thread but that's already taken by something else
 
-		attr_accessor :x,:y,:z,:size, :depth
+		attr_accessor :x,:y,:z,:size, :depth, :face
 
 		def initialize(args={})
 			@x = args[:x] || 0
@@ -25,6 +25,52 @@ module CrystalScad::ScrewThreads
 			@z = args[:z] || 0
 			@depth = args[:depth] 		
 			@size = args[:size]
+			@face = args[:face] || :top
+		end
+
+		def rotation
+			case @face.to_s
+				when "top"
+					return {}
+				when "bottom"
+					return {y:180}
+				when "left"
+					return {y:-90}
+				when "right"
+					return {y:90}
+				when "front" # checkme
+					return {x:90}
+				when "back"
+					return {x:-90}
+			end				
+		end
+
+		def show
+			cylinder(d:@size,h:@depth).rotate(rotation).translate(x:@x,y:@y,z:@z).color(r:130,g:130,b:130)
+		end
+
+		def orientation_swap_to(coords,rotation)
+			if rotation[:x].to_i == -90
+				return [coords[0],coords[2],-coords[1]]
+			end			
+			if rotation[:x].to_i == 90
+				return [coords[0],-coords[2],coords[1]]
+			end			
+			if rotation[:y].to_i == -90
+				return [coords[2],coords[1],coords[0]]
+			end			
+			if rotation[:y].to_i == 90
+				return [-coords[2],coords[1],-coords[0]]
+			end			
+	
+		return coords
+		end
+
+		def position_on(other_thread,rotation={})
+			oc = other_thread.x, other_thread.y, other_thread.z
+			oc = orientation_swap_to(oc,rotation)
+	
+			return {x:@x-oc[0],y:@y-oc[1],z:@z-oc[2]}	
 		end
 
 	end
@@ -39,7 +85,7 @@ module CrystalScad::ScrewThreads
 
 		# we need to know obj1 height (if not supplied by user)
 		height ||= args[:height]			
-		case face
+		case face.to_s
 			when "top"
 				height ||= obj1.z rescue nil
 			when "bottom"
@@ -116,6 +162,6 @@ module CrystalScad::ScrewThreads
 		end
 		
 		ret
-end	
+	end	
 
 end

@@ -76,6 +76,24 @@ module CrystalScad
 	  def scad_output()
 	    return self.output.scad_output
 	  end 
+		
+		def threads
+			a = []
+			[:threads_top,:threads_bottom,:threads_left,:threads_right,:threads_front,:threads_back].each do |m|
+				if self.respond_to? m
+					ret = self.send m
+					unless ret == nil
+						if ret.kind_of? Array
+							a+= ret
+						else
+							a << ret
+						end
+					end				
+				end
+			end
+
+			return a
+		end
 
 	end
 
