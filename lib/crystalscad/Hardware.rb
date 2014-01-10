@@ -207,7 +207,7 @@ module CrystalScad::Hardware
 
 		def output(margin=0.3)	
 			add_to_bom
-			return nut_934(margin)
+			return nut_934(false,margin)
 		end
 
 		def show
@@ -215,10 +215,10 @@ module CrystalScad::Hardware
 			return nut_934
 		end
 
-		def nut_934(margin=0)		
+		def nut_934(show=true,margin=0)		
 			@s += margin
 			nut=cylinder(d:(@s/Math.sqrt(3))*2,h:@height,fn:6)
-			nut-=cylinder(d:@size,h:@height)
+			nut-=cylinder(d:@size,h:@height) if show == true
 			nut.color("Gainsboro")
 		end	
 
