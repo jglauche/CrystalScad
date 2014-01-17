@@ -240,24 +240,81 @@ module CrystalScad::Hardware
 			@args[:gap] ||= 8.13
 			@args[:thickness] ||= 2.55
 			@args[:simple] ||= false
+		  @machining = CrystalScadObject.new
+		  @machining_string = ""
 		end
 
-		def output(length=nil)
-			if length != nil
-				@args[:length] = length
-			end
-			@@bom.add(description) unless args[:no_bom] == true
-
-			return single_profile.color("Silver")	 if @args[:configuration] == 1 		
-			return multi_profile.color("Silver")	 				
+		def output
+      res = profile
+ 
+      res - @machining 				
 		end
 		
     alias :show :output
 
 		def description
-			"T-Slot #{@args[:size]}x#{@args[:size]*@args[:configuration]}, length #{@args[:length]}mm"
+			"T-Slot #{@args[:size]}x#{@args[:size]*@args[:configuration]}, length #{@args[:length]}mm #{@machining_string}"
 		end
+  
+    def length(length)
+      @args[:length] = length
+      self
+    end
+  
+    def thread(args={})
+     position = args[:position] || "front"
+     @machining_string += "with thread on #{position} "
+     self
+    end
+    
+    def threads
+      self.thread().thread(position:"back")      
+    end
 
+    def holes(args={})
+      args[:position] = "front"
+      res = self.hole(args)
+      args[:position] = "back"
+      res.hole(args)
+    end
+
+    def hole(args={})
+      diameter = args[:diameter] || 8
+      position = args[:position] || "front"
+      side = args[:side] || "x"
+      
+      if position.kind_of? String
+        case position
+          when "front"
+            z = @args[:size]/2
+            @machining_string += "with #{diameter}mm hole on front "
+          when "back"
+            z = @args[:length] - @args[:size]/2
+            @machining_string += "with #{diameter}mm hole on back "
+        end
+      else
+        z = position
+        @machining_string += "with #{diameter}mm hole on #{z}mm "
+      end
+        
+      @args[:configuration].times do |c|
+        cyl = cylinder(d:diameter,h:@args[:size])
+        if side == "x"
+          @machining += cyl.rotate(x:-90).translate(x:@args[:size]/2+c*@args[:size],z:z) 
+        else
+          @machining += cyl.rotate(y:90).translate(y:@args[:size]/2+c*@args[:size],z:z) 
+        end
+      end
+      
+      self
+    end
+
+    def profile
+			@@bom.add(description) unless args[:no_bom] == true
+			return single_profile.color("Silver")	 if @args[:configuration] == 1 		
+			return multi_profile.color("Silver")      
+    end
+  
 		def single_profile
 		  if @args[:simple] == true
 		    return cube([@args[:size],@args[:size],@args[:length]])
@@ -294,6 +351,7 @@ module CrystalScad::Hardware
 			@args[:holes] ||= "front,back" # nil, front, back
 			@args[:bolt_size] ||= 8
 			@args[:bolt_length] ||= 25
+			puts "TSlotMachining is deprecated and will be removed in the 0.4.0 release."
 		end
 
 		alias tslot_output output
