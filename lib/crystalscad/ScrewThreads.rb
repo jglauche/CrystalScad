@@ -67,10 +67,16 @@ module CrystalScad::ScrewThreads
 		end
 
 		def position_on(other_thread,rotation={})
-			oc = other_thread.x, other_thread.y, other_thread.z
-			oc = orientation_swap_to(oc,rotation)
-	
-			return {x:@x-oc[0],y:@y-oc[1],z:@z-oc[2]}	
+		  if other_thread.kind_of? Bolt
+		    # we assume that a bolt is always centered and center the object on
+		    # the screwthread position
+		    return {x:-@x,y:-@y,z:-@z}
+		  else
+		    # on a screwthread find out its position and orientation
+  		  oc = other_thread.x, other_thread.y, other_thread.z
+	  		oc = orientation_swap_to(oc,rotation)
+        return {x:@x-oc[0],y:@y-oc[1],z:@z-oc[2]}	
+	    end
 		end
 
 	end
