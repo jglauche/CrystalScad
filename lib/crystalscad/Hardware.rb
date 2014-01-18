@@ -21,11 +21,15 @@ module CrystalScad::Hardware
 		def initialize(size,length,args={})
 			@args = args
 			@args[:type] ||= "912"
-			@args[:material] ||= "8.8"
+			@args[:material] ||= "steel 8.8"
 			@args[:surface] ||= "zinc plated"
 			# options for output only:	
 			@args[:additional_length] ||= 0
 			@args[:additional_diameter] ||= 0.3 
+
+			if @args[:washer] == true
+				@washer = Washer.new(size,{:material => @args[:material], :surface => @args[:surface]})
+			end
 
 			@size = size
 			@length = length
@@ -51,8 +55,17 @@ module CrystalScad::Hardware
 
 		def show
 			add_to_bom
-			return transform(bolt_912(0,0)) if @args[:type] == "912"
-			return transform(bolt_7380(0,0)) if @args[:type] == "7380"
+			res = bolt_912(0,0) if @args[:type] == "912"
+			res = bolt_7380(0,0) if @args[:type] == "7380"
+			raise "unkown type #{args[:type]} for Bolt!" if res == nil
+			
+			if @washer
+				res += @washer.show
+				res = res.translate(z:-@washer.height)
+			end
+	
+		
+			transform(res)			
 		end 
 
 		def transform(obj)	
@@ -126,7 +139,7 @@ module CrystalScad::Hardware
 			@args=args			
 			@size = size
 			@args[:type] ||= "125"
-			@args[:material] ||= "steel"
+			@args[:material] ||= "steel 8.8"
 			@args[:surface] ||= "zinc plated"			
 	
 			@chart_din125 = { 3.2 => {outer_diameter:7, height:0.5},
