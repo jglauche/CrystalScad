@@ -143,7 +143,7 @@ module CrystalScad::ScrewThreads
 
 		ret = []
 		holes.each_with_index do |hole,i|
-			bolt = Bolt.new(hole.size,bolt_heights[i])
+			bolt = Bolt.new(hole.size,bolt_heights[i],washer:args[:washer])
 		  case face
 				when "top"
 					bolt.transformations << Rotate.new(x:180)	
