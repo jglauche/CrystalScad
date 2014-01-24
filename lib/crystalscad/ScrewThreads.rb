@@ -49,6 +49,10 @@ module CrystalScad::ScrewThreads
 			cylinder(d:@size,h:@depth).rotate(rotation).translate(x:@x,y:@y,z:@z).color(r:130,g:130,b:130)
 		end
 
+    def output
+      show
+    end  
+  
 		def orientation_swap_to(coords,rotation)
 			if rotation[:x].to_i == -90
 				return [coords[0],coords[2],-coords[1]]
