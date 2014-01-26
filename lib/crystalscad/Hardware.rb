@@ -334,10 +334,15 @@ module CrystalScad::Hardware
 		  else
 			  start=@args[:thickness].to_f/Math.sqrt(2);
 		   
-			  gap = @args[:gap]
-			  thickness = @args[:thickness]
+			  gap = @args[:gap].to_f
+			  thickness = @args[:thickness].to_f
 			  size= @args[:size]
-			  profile = square(size:gap+thickness,center:true);
+				square_size = gap+thickness
+				if square_size > 0
+				  profile = square(size:gap+thickness,center:true)
+				else
+					profile = nil
+				end
 		    (0..3).each{|d|
 		        profile+=polygon(points:[[0,0],[0,start],[size/2-thickness-start,size/2-thickness],[gap/2,size/2-thickness],[gap/2,size/2],[size/2,size/2],[size/2,gap/2],[size/2-thickness,gap/2],[size/2-thickness,size/2-thickness-start],[start,0]]).rotate(z:d*90)
 		    }
