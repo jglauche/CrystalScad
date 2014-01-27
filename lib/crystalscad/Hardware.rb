@@ -339,7 +339,7 @@ module CrystalScad::Hardware
 			  size= @args[:size]
 				square_size = gap+thickness
 				if square_size > 0
-				  profile = square(size:gap+thickness,center:true)
+				  profile = square(size:square_size,center:true)
 				else
 					profile = nil
 				end
