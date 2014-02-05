@@ -7,9 +7,10 @@ Installation:
 ===========
 Dependencies:
 - Ruby 1.9.3
-- inotifywait
 - gem rubyscad
 - gem requireall
+- gem observr (optional)
+
 
 Install via gem:
 
