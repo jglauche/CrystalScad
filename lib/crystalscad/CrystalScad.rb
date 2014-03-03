@@ -22,6 +22,7 @@ module CrystalScad
 	include CrystalScad::LinearBearing
 	include CrystalScad::Gears
 	include CrystalScad::ScrewThreads
+	include CrystalScad::PrintedThreads
 
 	
 	class CrystalScadObject
@@ -189,6 +190,16 @@ module CrystalScad
 		Sphere.new(args)		
 	end
 		
+	class Polyhedron < Primitive
+		def to_rubyscad	
+			return RubyScadBridge.new.polyhedron(@args)		
+		end			
+	end
+
+	def polyhedron(args)
+		Polyhedron.new(args)
+	end
+	
 
 	#	2d primitives
 	class Square < Primitive
@@ -494,6 +505,14 @@ module CrystalScad
     hull(cylinder(d:args[:d],r:args[:r],h:args[:h]),cylinder(d:args[:d],r:args[:r],h:args[:h]).translate(x:args[:l]))    
   end
   
+	def radians(a)
+  	a/180.0 * Math::PI
+	end
+  
+  def degrees(a)
+	  a*180 /  Math::PI
+  end
+
 end
 
 
