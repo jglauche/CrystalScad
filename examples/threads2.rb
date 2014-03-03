@@ -79,7 +79,6 @@ pos = male.threads_bottom.first.position_on(female.threads_top.first,rotation)
 res += female.show.rotate(rotation).mirror(z:1).translate(pos)
 
 
-
 rotation = {y:-90}
 pos = male.threads_left.first.position_on(female.threads_top.first,rotation)
 res += female.show.rotate(rotation).translate(pos)
