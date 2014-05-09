@@ -102,5 +102,12 @@ module CrystalScad
 	    "Printed part #{self.class.to_s}"
 	  end		
 	end
+	
+	class LasercutSheet < Assembly
+	  def description
+	    "Laser cut sheet #{self.class.to_s}"
+	  end				
+	end	
+
 end
 
