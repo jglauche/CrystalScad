@@ -96,6 +96,15 @@ module CrystalScad
 			self			
 		end
 
+		def scale(args)
+			if args.kind_of? Numeric or args.kind_of? Array
+					args = {v:args}
+			end
+			@transformations << Scale.new(args)		
+			self			
+		end
+
+
   end
 
 	class Transformation < CrystalScadObject
@@ -119,6 +128,11 @@ module CrystalScad
 		end	
 	end
 	
+	class Scale < Transformation
+		def to_rubyscad
+			return RubyScadBridge.new.scale(@args)		
+		end
+	end
 	
 	class Cylinder < Primitive
 		def to_rubyscad	
