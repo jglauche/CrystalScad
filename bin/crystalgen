@@ -35,6 +35,8 @@ res = #{name.capitalize}Assembly.new.show
 
 res.save(\"#{name}.scad\",\"$fn=64;\")
 
+@@bom.save(\"bom.txt\")
+
 "
 		end  
 		chmod("#{name}/#{name}.rb",0755)
