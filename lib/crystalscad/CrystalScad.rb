@@ -367,7 +367,9 @@ module CrystalScad
 	class Import < Primitive
 		def initialize(filename)
 			@transformations = []
-			@filename = filename		
+			# we need to convert relative to absolute paths if the openscad output is not in the same directory
+			# as the crystalscad program.
+			@filename = File.expand_path(filename) 		
 		end		
 		
 		def to_rubyscad	
