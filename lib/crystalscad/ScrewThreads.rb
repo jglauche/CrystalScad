@@ -156,7 +156,7 @@ module CrystalScad::ScrewThreads
 					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z})		
 				when "left"
 					bolt.transformations << Rotate.new(y:90)						
-					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z+height})		
+					bolt.transformations << Translate.new({x:hole.x,y:hole.y,z:hole.z})		
 				when "right"
 					bolt.transformations << Rotate.new(y:-90)						
 					bolt.transformations << Translate.new({x:hole.x+height,y:hole.y,z:hole.z})		
