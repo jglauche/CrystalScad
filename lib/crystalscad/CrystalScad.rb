@@ -365,15 +365,28 @@ module CrystalScad
 
 
 	class Import < Primitive
-		def initialize(filename)
+		def initialize(args)
 			@transformations = []
+			
+			if args.kind_of? String
+			  filename = args
+			else # assume hash otherwise
+			  filename = args[:file]
+			  @layer = args[:layer]
+			end			
+			
+			
 			# we need to convert relative to absolute paths if the openscad output is not in the same directory
 			# as the crystalscad program.
 			@filename = File.expand_path(filename) 		
 		end		
 		
 		def to_rubyscad	
-			return RubyScadBridge.new.import("\""+@filename.to_s+"\"") # apparently the quotes get lost otherwise
+		  layer = ""
+		  if @layer
+		    layer = ",layer=\"#{@layer}\""
+		  end
+			return RubyScadBridge.new.import("file=\""+@filename.to_s+"\"#{layer}") # apparently the quotes get lost otherwise
 		end	
 	end
 
