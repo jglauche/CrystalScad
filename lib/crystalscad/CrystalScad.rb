@@ -272,6 +272,32 @@ module CrystalScad
 		end
 	end
 
+  class AdvancedPrimitive < Primitive
+    
+    
+    def initialize(attributes)
+      @attr = attributes.collect { |k, v| "#{k} = \"#{v}\"" }.join(', ')
+      super
+    end
+    
+  	def to_rubyscad
+			"#{@operation}(#{@attr});"
+		end
+  
+  end
+
+
+  class Text < AdvancedPrimitive
+		def initialize(attributes)
+			@operation = "text"
+			super(attributes)
+		end
+  end
+
+	def text(args={})
+		return Text.new(args)				
+	end
+
 
 	class CSGModelling < Primitive
 		def initialize(*list)
@@ -453,7 +479,6 @@ module CrystalScad
 			super(object, attributes)
 		end
 	end
-
 	
 	def color(args)
 		return Color.new(self,args)		
@@ -482,7 +507,6 @@ module CrystalScad
 		return Projection.new(self,args)				
 	end
 
-	
 
 	#	Stacks parts along the Z axis
 	# works on all Assemblies that have a @height definition
