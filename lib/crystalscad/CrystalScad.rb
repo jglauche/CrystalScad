@@ -217,9 +217,32 @@ module CrystalScad
 
 	#	2d primitives
 	class Square < Primitive
+	  def initialize(*args)
+	    super(args)
+	    @x,@y = args[0][:size].map{|l| l.to_f}
+	  end
+
 		def to_rubyscad
 			return RubyScadBridge.new.square(@args)		
 		end			
+		
+		def center_xy
+			@transformations << Translate.new({x:-@x/2,y:-@y/2})
+			self
+		end
+    alias center center_xy
+
+		def center_x
+			@transformations << Translate.new({x:-@x/2})
+			self
+		end
+
+		def center_y
+			@transformations << Translate.new({y:-@y/2})
+			self
+		end
+
+				
 	end
 
 	def square(args)
