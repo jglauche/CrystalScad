@@ -219,7 +219,12 @@ module CrystalScad
 	class Square < Primitive
 	  def initialize(*args)
 	    super(args)
-	    @x,@y = args[0][:size].map{|l| l.to_f}
+			if args[0][:size].kind_of? Array
+		    @x,@y = args[0][:size].map{|l| l.to_f}
+			else
+				@x = args[0][:size].to_f
+				@y = @x
+			end		
 	  end
 
 		def to_rubyscad
