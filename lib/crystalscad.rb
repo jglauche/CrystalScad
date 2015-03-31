@@ -6,5 +6,6 @@ require 'crystalscad/LinearBearing'
 require 'crystalscad/Gears'
 require 'crystalscad/ScrewThreads'
 require 'crystalscad/PrintedThreads'
+require 'crystalscad/Pipe'
 require 'crystalscad/CrystalScad'
 
