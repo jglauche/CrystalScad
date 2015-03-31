@@ -25,7 +25,7 @@ pipe.cw(30,60,"blue")
 pipe.ccw(30,45,"green")
 pipe.line(3)
 pipe.ccw(30,160,"blue")
-pipe.ccw(30,60,"green")
+pipe.ccw(30,60,"pink")
 
 
 #pipe.cw(30,60,"blue")
