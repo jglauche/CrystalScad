@@ -30,15 +30,19 @@ module CrystalScad
 		end
 
 		def initialize(args={})
-			@diameter = args[:diameter]
+			# parameters
+			@diameter = args[:diameter] || 1
+			@fn = args[:fn] || 64
+			@line_rotation = args[:line_rotation] || 0 # z rotation in case needed with fn values
+
+			# variable initialization
 			@pipe = nil	
-			@line_rotation = 0 # z rotation in case needed with fn values
 			@sum_x = 0
 			@sum_y = 0
 		end
 
 		def shape
-			res = circle(d:@diameter)
+			res = circle(d:@diameter,fn:@fn)
 		end
 		
 		def inner_shape
