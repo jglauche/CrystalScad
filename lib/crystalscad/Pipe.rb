@@ -16,135 +16,135 @@
 
 
 module CrystalScad
-	class Pipe
-		attr_accessor :x,:y, :pipe
-		def radians(a)
-		  a/180.0 * Math::PI
-		end
+  class Pipe
+    attr_accessor :x,:y, :pipe
+    def radians(a)
+      a/180.0 * Math::PI
+    end
 
-		def initialize(args={})
-			@diameter = args[:diameter]
-			@pipe = nil	
-			@line_rotation = 0 # z rotation in case needed with fn values
-		end
+    def initialize(args={})
+      @diameter      = args[:diameter]
+      @pipe          = nil
+      @line_rotation = 0 # z rotation in case needed with fn values
+    end
 
-		def shape
-			res = circle(d:@diameter)
-		end
-		
-		def inner_shape
-			nil
-		end
-	
-		# go clockwise
-		def cw(radius,angle,color=nil)
-			if angle > 360
-				return false		
-			end		
-			# since bent can only do up to 90°, splitting it up in chunks in order to grow it 
-			if angle > 90
-				return cw(radius,90,color) + cw(radius,angle-90,color)	
-			end
+    def shape
+      res = circle(d:@diameter)
+    end
 
-			if @pipe == nil
-				@pipe = bent_cw(radius,angle)	
-				@pipe = @pipe.color(color) unless color == nil
-			else
-				rotated_pipe = @pipe.rotate(z:-angle)	
-				pipe_piece = bent_cw(radius,angle)
-				pipe_piece = pipe_piece.color(color) unless color == nil
-				@pipe = pipe_piece + rotated_pipe.translate(x:x,y:y-radius)
-			end	
-		end
+    def inner_shape
+      nil
+    end
 
-		# go counter clockwise
-		def ccw(radius,angle,color=nil)
-			if angle > 360
-				return false		
-			end		
-			# since bent can only do up to 90°, splitting it up in chunks in order to grow it 
-			if angle > 90
-				return ccw(radius,90,color) + ccw(radius,angle-90,color)	
-			end
+    # go clockwise
+    def cw(radius,angle,color=nil)
+      if angle > 360
+        return false
+      end
+      # since bent can only do up to 90°, splitting it up in chunks in order to grow it
+      if angle > 90
+        return cw(radius,90,color) + cw(radius,angle-90,color)
+      end
 
-			if @pipe == nil
-				@pipe = bent_ccw(radius,angle)	
-				@pipe = @pipe.color(color) unless color == nil
-			else
-				rotated_pipe = @pipe.rotate(z:angle)	
-				pipe_piece = bent_ccw(radius,angle)
-				pipe_piece = pipe_piece.color(color) unless color == nil
-				@pipe = pipe_piece + rotated_pipe.translate(x:x,y:y+radius)
-			end	
-	
-		end
+      if @pipe == nil
+        @pipe = bent_cw(radius,angle)
+        @pipe = @pipe.color(color) unless color == nil
+      else
+        rotated_pipe = @pipe.rotate(z:-angle)
+        pipe_piece   = bent_cw(radius,angle)
+        pipe_piece   = pipe_piece.color(color) unless color == nil
+        @pipe        = pipe_piece + rotated_pipe.translate(x:x,y:y-radius)
+      end
+    end
 
-		def line(length,color=nil)
-			if @pipe == nil
-				@pipe = create_line(length,color) 
-			else
-				@pipe = @pipe.translate(x:length) + create_line(length,color)				
-			end
+    # go counter clockwise
+    def ccw(radius,angle,color=nil)
+      if angle > 360
+        return false
+      end
+      # since bent can only do up to 90°, splitting it up in chunks in order to grow it
+      if angle > 90
+        return ccw(radius,90,color) + ccw(radius,angle-90,color)
+      end
 
-		end
+      if @pipe == nil
+        @pipe = bent_ccw(radius,angle)
+        @pipe = @pipe.color(color) unless color == nil
+      else
+        rotated_pipe = @pipe.rotate(z:angle)
+        pipe_piece   = bent_ccw(radius,angle)
+        pipe_piece   = pipe_piece.color(color) unless color == nil
+        @pipe        = pipe_piece + rotated_pipe.translate(x:x,y:y+radius)
+      end
 
-		private
-		def create_line(length,color=nil)
-			res = shape.linear_extrude(h:length)
-			if inner_shape 
-				res -= inner_shape.linear_extrude(h:length+0.2).translate(z:-0.1)
-			end
-			if color
-				res = res.color(color)		
-			end
-			res.rotate(z:@line_rotation).rotate(y:90)
-		end
-	
-		def bent_cw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(convexity:10)
-			res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
+    end
 
-			len = radius+@diameter/2.0
-			@x = Math::sin(radians(angle))*len
-			@y = Math::cos(radians(angle))*len
-			cut = polygon(points:[[0,0],[0,len],[@x,@y]]).scale(2)
-		
-			# for working with it
-			len = radius #- @diameter / 2.0
-			@x = Math::sin(radians(angle))*len
-			@y = Math::cos(radians(angle))*len
-	
+    def line(length,color=nil)
+      if @pipe == nil
+        @pipe = create_line(length,color)
+      else
+        @pipe = @pipe.translate(x:length) + create_line(length,color)
+      end
 
-			res *= cut.linear_extrude(h:100).translate(z:-50)
-		
-			# Positioning it on 0 
-		
-			return res.translate(y:-radius)
-		end
+    end
 
-		def bent_ccw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(convexity:10)
-			res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
+    private
+    def create_line(length,color=nil)
+      res = shape.linear_extrude(h:length)
+      if inner_shape
+        res -= inner_shape.linear_extrude(h:length+0.2).translate(z:-0.1)
+      end
+      if color
+        res = res.color(color)
+      end
+      res.rotate(z:@line_rotation).rotate(y:90)
+    end
 
-			len = radius+@diameter/2.0
-			@x = Math::sin(radians(angle))*len
-			@y = Math::cos(radians(angle))*len
-			cut = polygon(points:[[0,0],[0,len],[@x,@y]]).scale(2)
-		
-			# for working with it
-			len = radius #- @diameter / 2.0
-			@x = Math::sin(radians(angle))*len
-			@y = -1*Math::cos(radians(angle))*len
-	
+    def bent_cw(radius,angle)
+      res  = shape.translate(x:radius).rotate_extrude(convexity:10)
+      res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
 
-			res *= cut.linear_extrude(h:100).translate(z:-50)
-			res = res.mirror(y:1)	
-			# Positioning it on 0 
-		
-			return res.translate(y:radius)
-		end
+      len = radius+@diameter/2.0
+      @x  = Math::sin(radians(angle))*len
+      @y  = Math::cos(radians(angle))*len
+      cut = polygon(points:[[0,0],[0,len],[@x,@y]]).scale(2)
+
+      # for working with it
+      len = radius #- @diameter / 2.0
+      @x  = Math::sin(radians(angle))*len
+      @y  = Math::cos(radians(angle))*len
 
 
-	end
+      res *= cut.linear_extrude(h:100).translate(z:-50)
+
+      # Positioning it on 0
+
+      return res.translate(y:-radius)
+    end
+
+    def bent_ccw(radius,angle)
+      res  = shape.translate(x:radius).rotate_extrude(convexity:10)
+      res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
+
+      len = radius+@diameter/2.0
+      @x  = Math::sin(radians(angle))*len
+      @y  = Math::cos(radians(angle))*len
+      cut = polygon(points:[[0,0],[0,len],[@x,@y]]).scale(2)
+
+      # for working with it
+      len = radius #- @diameter / 2.0
+      @x  = Math::sin(radians(angle))*len
+      @y  = -1*Math::cos(radians(angle))*len
+
+
+      res *= cut.linear_extrude(h:100).translate(z:-50)
+      res  = res.mirror(y:1)
+      # Positioning it on 0
+
+      return res.translate(y:radius)
+    end
+
+
+  end
 end
 

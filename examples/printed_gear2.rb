@@ -3,7 +3,7 @@ require "rubygems"
 require "crystalscad"
 include CrystalScad
 
-  
+
 g1 = PrintedGear.new(module:2.0,teeth:40,bore:8.5,height:6)
 res = g1.show.color("red")
 

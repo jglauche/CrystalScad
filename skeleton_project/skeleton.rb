@@ -26,9 +26,3 @@ parts.each do |part|
   end
 
 end
-
-  
-  
-
-
-

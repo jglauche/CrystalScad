@@ -15,28 +15,28 @@
 
 module CrystalScad::BillOfMaterial
 
-	class BillOfMaterial
-		attr_accessor :parts
-		def initialize
-			@parts = {}
-		end
+  class BillOfMaterial
+    attr_accessor :parts
+    def initialize
+      @parts = {}
+    end
 
-		def add(part, quantity=1)
-			@parts[part] ||= 0
-			@parts[part] += quantity
-		end
+    def add(part, quantity=1)
+      @parts[part] ||= 0
+      @parts[part] += quantity
+    end
 
-		def output
-			@parts.map{|key, qty| "#{qty} x #{key}"}.join("\n")
-		end	
-		
-		def save(filename="bom.txt")
-		  file = File.open(filename,"w")
+    def output
+      @parts.map{|key, qty| "#{qty} x #{key}"}.join("\n")
+    end
+
+    def save(filename="bom.txt")
+      file = File.open(filename,"w")
       file.puts output
       file.close
-		end
-	end
+    end
+  end
 
-	@@bom = BillOfMaterial.new
+  @@bom = BillOfMaterial.new
 
 end

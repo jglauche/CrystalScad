@@ -3,7 +3,7 @@ require "rubygems"
 require "crystalscad"
 include CrystalScad
 
-  
+
 t1 = PrintedThread.new
 res = t1.show
 

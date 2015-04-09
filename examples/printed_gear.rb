@@ -3,7 +3,7 @@ require "rubygems"
 require "crystalscad"
 include CrystalScad
 
-  
+
 g1 = PrintedGear.new(module:2.0,teeth:40,bore:5,height:4)
 g2 = PrintedGear.new(module:2.0,teeth:20,bore:5,height:4,rotation:0.5) # rotation in number of teeth
 

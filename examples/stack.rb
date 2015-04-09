@@ -4,12 +4,12 @@ require "crystalscad"
 include CrystalScad
 
 
-parts = [ 
-			Washer.new(4.3),
-			Nut.new(4),		
-			Washer.new(4.3),
-			Nut.new(4)		
-		]
+parts = [
+  Washer.new(4.3),
+  Nut.new(4),
+  Washer.new(4.3),
+  Nut.new(4)
+]
 bolt = Bolt.new(4,16).show
 bolt_assembly = bolt
 bolt_assembly += stack({method:"output"}, *parts)

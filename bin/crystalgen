@@ -5,14 +5,14 @@ require "thor"
 require "thor/group"
 require "thor/actions"
 
-class CrystalGen < Thor                                     
-	include Thor::Actions
+class CrystalGen < Thor
+  include Thor::Actions
 
-  desc "project APP_NAME", "creates a new project stub"  
+  desc "project APP_NAME", "creates a new project stub"
 
   def project(name)
 
-		create_file("#{name}/#{name}.rb") do
+    create_file("#{name}/#{name}.rb") do
 "#!/usr/bin/ruby1.9.3
 require \"rubygems\"
 require \"crystalscad\"
@@ -22,14 +22,14 @@ include CrystalScad
 require_all \"lib/**/*.rb\"
 
 # To run this project and refresh any changes to the code, run the following command
-# in a terminal (make sure you are in the same directory as this file): 
+# in a terminal (make sure you are in the same directory as this file):
 #  observr #{name}.observr
 #
 # This will generate #{name}.scad which you can open in OpenSCAD.
 # In OpenSCAD make sure that you have the menu item
-# Design -> Automatic Reload and Compile 
-# activated. 
- 
+# Design -> Automatic Reload and Compile
+# activated.
+
 
 res = #{name.capitalize}Assembly.new.show
 
@@ -38,41 +38,41 @@ res.save(\"#{name}.scad\",\"$fn=64;\")
 @@bom.save(\"bom.txt\")
 
 "
-		end  
-		chmod("#{name}/#{name}.rb",0755)
-		empty_directory("#{name}/lib/assemblies/")
-		empty_directory("#{name}/lib/electronics/")
-		empty_directory("#{name}/lib/hardware/")
-		empty_directory("#{name}/lib/printed/")
-		empty_directory("#{name}/lib/lasercut/")
+    end
+    chmod("#{name}/#{name}.rb",0755)
+    empty_directory("#{name}/lib/assemblies/")
+    empty_directory("#{name}/lib/electronics/")
+    empty_directory("#{name}/lib/hardware/")
+    empty_directory("#{name}/lib/printed/")
+    empty_directory("#{name}/lib/lasercut/")
 
-		
-		create_file("#{name}/lib/assemblies/#{name}_assembly.rb") do
+
+    create_file("#{name}/lib/assemblies/#{name}_assembly.rb") do
 "class #{name.capitalize}Assembly < CrystalScad::Assembly
 
-	def part(show)
-		res = TestCube.new.show
-	end
+  def part(show)
+    res = TestCube.new.show
+  end
 
 end
-" 		
-		end
-
-		create_file("#{name}/lib/printed/testcube.rb") do 
-"class TestCube < CrystalScad::Printed
-	def initialize()
-		@size = [20,20,10]
-	end
-
-	def part(show)
-		cube(@size)
-	end
-
-end	
 "
-		end
-		
-		create_file("#{name}/#{name}.observr") do 
+    end
+
+    create_file("#{name}/lib/printed/testcube.rb") do
+"class TestCube < CrystalScad::Printed
+  def initialize()
+    @size = [20,20,10]
+  end
+
+  def part(show)
+    cube(@size)
+  end
+
+end
+"
+    end
+
+    create_file("#{name}/#{name}.observr") do
 "
 system(\"./#{name}.rb\")
 watch( \'#{name}.rb' )  {|md|
@@ -86,8 +86,8 @@ watch( 'lib/(.*)\.rb' )  {|md|
 watch( 'lib/*/(.*)\.rb' )  {|md|
    system(\"./#{name}.rb\")
 }
-"			
-		end
+"
+    end
 
   end
 
