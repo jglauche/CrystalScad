@@ -5,14 +5,14 @@ include CrystalScad
 
 
 class MyPipe < CrystalScad::Pipe
-	def shape
-		@line_rotation = 30
-		return circle(d:@diameter,fn:6)
-	end	
+  def shape
+    @line_rotation = 30
+    return circle(d:@diameter,fn:6)
+  end
 
-	def inner_shape
-		circle(d:6)
-	end
+  def inner_shape
+    circle(d:6)
+  end
 end
 
 pipe = MyPipe.new(diameter:10)
