@@ -17,7 +17,14 @@
 
 module CrystalScad
 	class Pipe
-		attr_accessor :x,:y, :pipe
+		attr_accessor :x,:y, :sum_x, :sum_y, :pipe
+		# Warning: sum_x and sum_y are both a quick hack at the moment
+		# 				 They will ONLY work on bends if you do same thing in the other direction 
+		#					 for example 
+		#					 pipe.cw(20,30)
+		#					 pipe.ccw(20,30)
+		#	This might be fixed in the future.
+
 		def radians(a)
 		  a/180.0 * Math::PI
 		end
@@ -26,6 +33,8 @@ module CrystalScad
 			@diameter = args[:diameter]
 			@pipe = nil	
 			@line_rotation = 0 # z rotation in case needed with fn values
+			@sum_x = 0
+			@sum_y = 0
 		end
 
 		def shape
@@ -85,7 +94,7 @@ module CrystalScad
 			else
 				@pipe = @pipe.translate(x:length) + create_line(length,color)				
 			end
-
+			@sum_x += length
 		end
 
 		private
@@ -114,6 +123,8 @@ module CrystalScad
 			@x = Math::sin(radians(angle))*len
 			@y = Math::cos(radians(angle))*len
 	
+			@sum_x += @x
+			@sum_y += @y	
 
 			res *= cut.linear_extrude(h:100).translate(z:-50)
 		
@@ -136,6 +147,8 @@ module CrystalScad
 			@x = Math::sin(radians(angle))*len
 			@y = -1*Math::cos(radians(angle))*len
 	
+			@sum_x += @x
+			@sum_y += @y	
 
 			res *= cut.linear_extrude(h:100).translate(z:-50)
 			res = res.mirror(y:1)	
