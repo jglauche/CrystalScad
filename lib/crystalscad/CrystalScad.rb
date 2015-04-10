@@ -455,8 +455,10 @@ module CrystalScad
 			@attributes = attributes
 		end
 
-		def to_rubyscad		
-			@attributes.gsub!("fn","$fn") # Apparently this doesn't work for CSGModifiers, like it does for other things in RubyScad?
+		def to_rubyscad	
+ 			#	Apparently this doesn't work for CSGModifiers, like it does for other things in RubyScad?
+		  # also this is a dirty, dirty hack. 	
+			@attributes = @attributes.gsub("fn","$fn").gsub("$$","$") 
 			ret = "#{@operation}(#{@attributes}){"
 			@children ||= []			
 			@children.each do |child|	
