@@ -456,6 +456,7 @@ module CrystalScad
 		end
 
 		def to_rubyscad		
+			@attributes.gsub!("fn","$fn") # Apparently this doesn't work for CSGModifiers, like it does for other things in RubyScad?
 			ret = "#{@operation}(#{@attributes}){"
 			@children ||= []			
 			@children.each do |child|	
@@ -521,12 +522,12 @@ module CrystalScad
 		return LinearExtrude.new(self,args)				
 	end
 
-	def rotate_extrude(args)
+	def rotate_extrude(args={})
 		if args[:h]	# rename to height
 			args[:height] = args[:h]
 			args.delete(:h)
 		end
-		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')
+		args = args.collect { |k, v| "#{k} = #{v}" }.join(', ')	
 		return RotateExtrude.new(self,args)				
 	end
 

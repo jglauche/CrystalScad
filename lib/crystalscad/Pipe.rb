@@ -17,7 +17,7 @@
 
 module CrystalScad
 	class Pipe
-		attr_accessor :x,:y, :sum_x, :sum_y, :pipe
+		attr_accessor :x,:y, :sum_x, :sum_y, :pipe, :bent_segments
 		# Warning: sum_x and sum_y are both a quick hack at the moment
 		# 				 They will ONLY work on bends if you do same thing in the other direction 
 		#					 for example 
@@ -33,6 +33,7 @@ module CrystalScad
 			# parameters
 			@diameter = args[:diameter] || 1
 			@fn = args[:fn] || 64
+			@bent_segments = args[:bent_segments] || 128
 			@line_rotation = args[:line_rotation] || 0 # z rotation in case needed with fn values
 
 			# variable initialization
@@ -114,8 +115,8 @@ module CrystalScad
 		end
 	
 		def bent_cw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(convexity:10)
-			res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
+			res = shape.translate(x:radius).rotate_extrude(fn:@bent_segments)
+			res -= inner_shape.translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
 
 			len = radius+@diameter/2.0
 			@x = Math::sin(radians(angle))*len
@@ -138,8 +139,8 @@ module CrystalScad
 		end
 
 		def bent_ccw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(convexity:10)
-			res -= inner_shape.translate(x:radius).rotate_extrude(convexity:10) unless inner_shape == nil
+			res = shape.translate(x:radius).rotate_extrude(fn:@bent_segments)
+			res -= inner_shape.translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
 
 			len = radius+@diameter/2.0
 			@x = Math::sin(radians(angle))*len
