@@ -15,7 +15,7 @@
 
 module CrystalScad::Hardware 
 
-	class Bolt	< CrystalScad::Assembly
+	class Bolt	< CrystalScad::Primitive
 		attr_accessor :transformations
 
 		def initialize(size,length,args={})

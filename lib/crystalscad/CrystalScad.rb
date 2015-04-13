@@ -25,87 +25,9 @@ module CrystalScad
 	include CrystalScad::PrintedThreads
 
 	
-	class CrystalScadObject
-		attr_accessor :args		
-    attr_accessor :transformations
-		def initialize(*args)
-			@transformations = []
-			@args = args.flatten
-			if @args[0].kind_of? Hash
-				@args = @args[0]			
-			end		
-		end		
-
-		def walk_tree
-			res = ""			
-			
-			@transformations.reverse.each{|trans|
-				res += trans.walk_tree 
-			}
-			res += self.to_rubyscad.to_s+ "\n"
-			res
-		end
-		alias :scad_output :walk_tree		
-		
-		def to_rubyscad
-			""
-		end
-		
-		def save(filename,start_text=nil)
-      file = File.open(filename,"w")
-      file.puts start_text unless start_text == nil
-      file.puts scad_output
-      file.close		
-		end
-
-		def method_missing(meth, *args, &block)		
-		end
-	
-	end
-
-	class Primitive < CrystalScadObject
-		attr_accessor :children		
-
-		def rotate(args)
-		  # always make sure we have a z parameter; otherwise RubyScad will produce a 2-dimensional output
-		  # which can result in openscad weirdness
-		  if args[:z] == nil
-		    args[:z] = 0
-		  end
-			@transformations << Rotate.new(args)	
-			self
-		end
-
-		def rotate_around(point,args)
-			x,y,z= point.x, point.y, point.z
-			self.translate(x:-x,y:-y,z:-z).rotate(args).translate(x:x,y:y,z:z)
-		end
-
-		def translate(args)
-			@transformations << Translate.new(args)		
-			self			
-		end
-		
-		def union(args)
-			@transformations << Union.new(args)		
-			self			
-		end
-
-		def mirror(args)
-			@transformations << Mirror.new(args)		
-			self			
-		end
-
-		def scale(args)
-			if args.kind_of? Numeric or args.kind_of? Array
-					args = {v:args}
-			end
-			@transformations << Scale.new(args)		
-			self			
-		end
 
 
-  end
+
 
 	class Transformation < CrystalScadObject
 	end

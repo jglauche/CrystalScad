@@ -19,6 +19,11 @@ module CrystalScad
 
 	  def initialize(args={})
 	    @args = args if @args == nil
+		
+			@x = args[:x]
+			@y = args[:y]
+			@z = args[:z]
+
       add_to_bom
 	  end
 
@@ -104,9 +109,14 @@ module CrystalScad
 	end
 	
 	class LasercutSheet < Assembly
+	
 	  def description
 	    "Laser cut sheet #{self.class.to_s}"
 	  end				
+		
+		def part(show)
+			square([@x,@y])
+		end
 	end	
 
 end
