@@ -45,6 +45,7 @@ res.save(\"#{name}.scad\",\"$fn=64;\")
 		empty_directory("#{name}/lib/hardware/")
 		empty_directory("#{name}/lib/printed/")
 		empty_directory("#{name}/lib/lasercut/")
+		empty_directory("#{name}/output")
 
 		
 		create_file("#{name}/lib/assemblies/#{name}_assembly.rb") do
