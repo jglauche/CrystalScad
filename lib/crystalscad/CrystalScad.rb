@@ -519,6 +519,28 @@ module CrystalScad
 	  a*180 /  Math::PI
   end
 
+		
+	# Saves all files generated of a CrystalScad file
+	# Saves outputs of 
+	# - show
+	# - output
+	# - view* 
+	def save_all(class_name)
+		res = class_name.send :new
+		(res.methods.grep(/view/)+[:show,:output]).each do |i|
+			res.send :initialize # ensure default values are loaded at each interation
+			res.send i unless i == :show or i == :output # call the view method
+			unless i == :output	
+				output = res.show
+			else
+				output = res.output
+			end
+
+			output.save("output/#{res.class}_#{i}.scad","fn=64;")
+		end
+	
+	end
+
 end
 
 
