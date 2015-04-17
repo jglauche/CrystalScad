@@ -49,7 +49,12 @@ module CrystalScad
 		def inner_shape
 			nil
 		end
-	
+
+		# This will be called on bent, so this library can work with rectangle pipes, if you overwrite this and let it rotate z by 90 
+		def apply_rotation(obj)
+			return obj		
+		end	
+
 		# go clockwise
 		def cw(radius,angle,color=nil)
 			if angle > 360
@@ -115,8 +120,8 @@ module CrystalScad
 		end
 	
 		def bent_cw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(fn:@bent_segments)
-			res -= inner_shape.translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
+			res = apply_rotation(shape).translate(x:radius).rotate_extrude(fn:@bent_segments)
+			res -= apply_rotation(inner_shape).translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
 
 			len = radius+@diameter/2.0
 			@x = Math::sin(radians(angle))*len
@@ -139,8 +144,8 @@ module CrystalScad
 		end
 
 		def bent_ccw(radius,angle)	
-			res = shape.translate(x:radius).rotate_extrude(fn:@bent_segments)
-			res -= inner_shape.translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
+			res = apply_rotation(shape).translate(x:radius).rotate_extrude(fn:@bent_segments)
+			res -= apply_rotation(inner_shape).translate(x:radius).rotate_extrude(fn:@bent_segments) unless inner_shape == nil
 
 			len = radius+@diameter/2.0
 			@x = Math::sin(radians(angle))*len
