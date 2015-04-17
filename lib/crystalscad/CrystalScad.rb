@@ -536,7 +536,7 @@ module CrystalScad
 				output = res.output
 			end
 
-			output.save("output/#{res.class}_#{i}.scad","fn=64;")
+			output.save("output/#{res.class}_#{i}.scad","$fn=64;")
 		end
 	
 	end
