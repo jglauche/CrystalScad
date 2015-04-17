@@ -15,6 +15,7 @@
 
 require "rubygems"
 require "rubyscad"
+$fn = 64
 
 module CrystalScad 
 	include CrystalScad::BillOfMaterial
@@ -525,7 +526,8 @@ module CrystalScad
 	# - show
 	# - output
 	# - view* 
-	def save_all(class_name)
+	def save_all(class_name,fn=$fn)
+
 		res = class_name.send :new
 		(res.methods.grep(/view/)+[:show,:output]).each do |i|
 			res.send :initialize # ensure default values are loaded at each interation
@@ -536,7 +538,7 @@ module CrystalScad
 				output = res.output
 			end
 
-			output.save("output/#{res.class}_#{i}.scad","$fn=64;")
+			output.save("output/#{res.class}_#{i}.scad","$fn=#{fn};")
 		end
 	
 	end
