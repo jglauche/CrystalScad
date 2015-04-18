@@ -24,7 +24,7 @@ module CrystalScad
 	include CrystalScad::Gears
 	include CrystalScad::ScrewThreads
 	include CrystalScad::PrintedThreads
-
+	include CrystalScad::Extras
 	
 
 
