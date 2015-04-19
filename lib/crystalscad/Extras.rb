@@ -59,20 +59,35 @@ module CrystalScad::Extras
 	end
 
 
+	def knurl(y)
+		x = 1.5
+		height = 1.5
+		res = cube(([x,y,height]))
+		res -= cylinder(d:0.9,h:height*1.42,fn:16).rotate(y:45).translate(x:0)
+		res -= cylinder(d:0.9,h:height*1.42,fn:16).rotate(y:-45).translate(x:1.5)
+
+		res
+	end
+	
+
 	def knurled_cube(size)
 		x = size[0]
 		y = size[1]
-		height = size[2]
-		res = cube(size)
-
-		offset = [x,height].max
-
-		(offset*2.2).ceil.times do |i|
-			res -= cylinder(d:0.9,h:height*2).rotate(y:45).translate(x:i*1.5-offset)
-			res -= cylinder(d:0.9,h:height*2).rotate(y:-45).translate(x:i*1.5-offset)
+		z = size[2]
+		res = nil
+			
+		(x / 1.5).ceil.times do |i|
+			(z / 1.5).ceil.times do |f|
+				res += knurl(y).translate(x:i*1.5,z:f*1.5) 			
+			end
 		end
+
+		res *= cube([x,y,z])
+ 
+
 		res
 	end
+
 
 	def knurled_cylinder(args={})
 		res = cylinder(args)	
