@@ -21,6 +21,15 @@ module CrystalScad
 		end
 		alias :scad_output :walk_tree		
 		
+		def walk_tree_classes
+			res = []
+			@transformations.reverse.each{|trans|
+				res += trans.walk_tree_classes 
+			}
+			res << self.class
+			res
+		end
+
 		def to_rubyscad
 			""
 		end
