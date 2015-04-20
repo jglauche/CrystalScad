@@ -529,7 +529,8 @@ module CrystalScad
 	def save_all(class_name,fn=$fn)
 
 		res = class_name.send :new
-		(res.methods.grep(/view/)+[:show,:output]).each do |i|
+		# regexp for output* view* show* 
+		res.methods.grep(Regexp.union(/^output/,/^view/,/^show/)).each do |i|
 			output = nil
 
 			res.send :initialize # ensure default values are loaded at each interation
@@ -537,15 +538,16 @@ module CrystalScad
 				output = res.send i 
 			end
 
-			unless i == :output	
-				# if previous call resulted in a CrystalScadObject, don't call the show method again,
-				# otherwise call it.
-				unless 	output.kind_of? CrystalScadObject
+			# if previous call resulted in a CrystalScadObject, don't call the show method again,
+			# otherwise call it.
+			unless 	output.kind_of? CrystalScadObject
+				unless i.to_s.include? "output"	
 					output = res.show					
+				else
+					output = res.output
 				end
-			else
-				output = res.output
 			end
+
 
 			output.save("output/#{res.class}_#{i}.scad","$fn=#{fn};") unless output == nil
 		end
