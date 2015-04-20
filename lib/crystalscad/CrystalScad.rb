@@ -530,15 +530,24 @@ module CrystalScad
 
 		res = class_name.send :new
 		(res.methods.grep(/view/)+[:show,:output]).each do |i|
+			output = nil
+
 			res.send :initialize # ensure default values are loaded at each interation
-			res.send i unless i == :show or i == :output # call the view method
+			unless i == :show or i == :output # call the view method
+				output = res.send i 
+			end
+
 			unless i == :output	
-				output = res.show
+				# if previous call resulted in a CrystalScadObject, don't call the show method again,
+				# otherwise call it.
+				unless 	output.kind_of? CrystalScadObject
+					output = res.show					
+				end
 			else
 				output = res.output
 			end
 
-			output.save("output/#{res.class}_#{i}.scad","$fn=#{fn};")
+			output.save("output/#{res.class}_#{i}.scad","$fn=#{fn};") unless output == nil
 		end
 	
 	end
