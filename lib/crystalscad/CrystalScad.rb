@@ -11,7 +11,7 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>.
+#    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>fre.
 
 require "rubygems"
 require "rubyscad"
@@ -265,6 +265,8 @@ module CrystalScad
 				rescue NoMethodError	
 				end
 			end
+			#puts @children.map{|l| l.walk_tree_classes}.inspect
+
 			ret +="}"			
 		end
 	end	
@@ -363,13 +365,31 @@ module CrystalScad
 		  if @layer
 		    layer = ",layer=\"#{@layer}\""
 		  end
-			return RubyScadBridge.new.import("file=\""+@filename.to_s+"\"#{layer}") # apparently the quotes get lost otherwise
+			return self.children.map{|l| l.walk_tree} + RubyScadBridge.new.import("file=\""+@filename.to_s+"\"#{layer}") # apparently the quotes get lost otherwise
 		end	
 	end
 
 	def import(filename)
 		Import.new(filename)
 	end
+
+# That does not work like this.	
+#	class Render < Primitive
+#		def initialize(object, attributes)
+#			@operation = "render"
+#			super(object, attributes)
+#		end		
+#
+#		def to_rubyscad	
+#			return RubyScadBridge.new.render() 
+#		end	
+#
+#	end
+#	
+#	def render(args={})
+#		return Render.new(self,args)		
+#	end
+
 
 	class CSGModifier < Primitive
 		def initialize(object, attributes)
@@ -412,7 +432,7 @@ module CrystalScad
 			super(object, attributes)
 		end
 	end
-	
+
 	class LinearExtrude < CSGModifier
 		def initialize(object, attributes)
 			@operation = "linear_extrude"
@@ -437,6 +457,7 @@ module CrystalScad
 	def color(args)
 		return Color.new(self,args)		
 	end
+
 
 	def linear_extrude(args)
 		if args[:h]	# rename to height
@@ -534,9 +555,7 @@ module CrystalScad
 			output = nil
 
 			res.send :initialize # ensure default values are loaded at each interation
-			unless i == :show or i == :output # call the view method
-				output = res.send i 
-			end
+			output = res.send i 
 
 			# if previous call resulted in a CrystalScadObject, don't call the show method again,
 			# otherwise call it.
@@ -553,6 +572,23 @@ module CrystalScad
 		end
 	
 	end
+
+	def get_classes_from_file(filename)
+		classes = []
+		File.readlines(filename).find_all{|l| l.include?("class")}.each do |line|
+			# strip all spaces, tabs
+			line.strip!			
+			# ignore comments (Warning: will not worth with ruby multi line comments)
+			next if line[0..0] == "#"
+			#	strip class definition
+			line = line[6..-1]
+			# strip until space appears - or if not, to the end
+			classes << Object.const_get(line[0..line.index(" ").to_i-1])		
+		end
+
+		return classes
+	end
+
 
 end
 
