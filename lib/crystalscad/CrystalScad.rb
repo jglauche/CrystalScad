@@ -346,7 +346,8 @@ module CrystalScad
 	class Import < Primitive
 		def initialize(args)
 			@transformations = []
-			
+			@children = []			
+		
 			if args.kind_of? String
 			  filename = args
 			else # assume hash otherwise
@@ -365,7 +366,12 @@ module CrystalScad
 		  if @layer
 		    layer = ",layer=\"#{@layer}\""
 		  end
-			return self.children.map{|l| l.walk_tree} + RubyScadBridge.new.import("file=\""+@filename.to_s+"\"#{layer}") # apparently the quotes get lost otherwise
+			res = self.children.map{|l| l.walk_tree}
+			if res == []
+				res = ""
+			end
+ 			res += RubyScadBridge.new.import("file=\""+@filename.to_s+"\"#{layer}") # apparently the quotes get lost otherwise
+			res		
 		end	
 	end
 
