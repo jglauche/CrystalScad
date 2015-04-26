@@ -230,14 +230,14 @@ module CrystalScad::Hardware
 		end
 
 		def prepare_data
-			chart_934 = {2.5=> {side_to_side:5,height:2}, 
-										3 => {side_to_side:5.5,height:2.4},
-									  4 => {side_to_side:7,height:3.2},
-										5 => {side_to_side:8,height:4},
-										6 => {side_to_side:10,height:5},
-										8 => {side_to_side:13,height:6.5},
-									 10 => {side_to_side:17,height:8},
-									 12 => {side_to_side:19,height:10},
+			chart_934 = {2.5=> {side_to_side:5,height:2, support_diameter:2.8}, 
+										3 => {side_to_side:5.5,height:2.4, support_diameter:3.5},
+									  4 => {side_to_side:7,height:3.2, support_diameter:4.4},
+										5 => {side_to_side:8,height:4, support_diameter:5.3},
+										6 => {side_to_side:10,height:5, support_diameter:6.3},
+										8 => {side_to_side:13,height:6.5, support_diameter:8.3},
+									 10 => {side_to_side:17,height:8, support_diameter:10.3},
+									 12 => {side_to_side:19,height:10, support_diameter:12.3},
 
 									}
 			# for securing nuts
@@ -250,11 +250,21 @@ module CrystalScad::Hardware
 
 			@s = chart_934[@size][:side_to_side]
 			@height = chart_934[@size][:height]
+			@support_diameter = chart_934[@size][:support_diameter]
 
 			if @type == "985"
 				@height = chart_985[@size][:height]			
 			end
 	
+		end
+
+		def add_support(layer_height=0.2)
+			res = cylinder(d:@support_diameter,h:@height-layer_height)
+			# on very small nuts, add a support base of one layer height, so the support won't fall over
+			if @size < 6 
+				res += cylinder(d:@s-1,h:layer_height)
+			end	
+			res
 		end
 
 		def output(margin=0.3)	
