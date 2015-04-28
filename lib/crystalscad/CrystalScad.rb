@@ -299,8 +299,18 @@ module CrystalScad
 		end
 	end
 
+	def optimize_union(top, child)
+
+		if top.kind_of? Union and not child.kind_of? Union
+			top.children << child
+			return top
+		else
+			return Union.new(top,child)
+		end
+	end
+
 	def +(args)	
-		return args	 if self == nil		
+		return Union.new(nil,args)	 if self == nil		
 		if args.kind_of? Array
 			r = self			
 			args.each do |a|
@@ -312,7 +322,7 @@ module CrystalScad
 			end
 			r
 		else
-			Union.new(self,args)
+			optimize_union(self,args)
 		end		
 	end
 
