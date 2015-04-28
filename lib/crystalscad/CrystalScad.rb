@@ -379,22 +379,29 @@ module CrystalScad
 		Import.new(filename)
 	end
 
-# That does not work like this.	
-#	class Render < Primitive
-#		def initialize(object, attributes)
-#			@operation = "render"
-#			super(object, attributes)
-#		end		
-#
-#		def to_rubyscad	
-#			return RubyScadBridge.new.render() 
-#		end	
-#
-#	end
-#	
-#	def render(args={})
-#		return Render.new(self,args)		
-#	end
+	class Render < Primitive
+		def initialize(object, attributes)
+			@operation = "render"
+			@children = [object]
+			super(object, attributes)
+		end		
+
+		def to_rubyscad	
+		  layer = ""
+		  if @layer
+		    layer = ",layer=\"#{@layer}\""
+		  end
+			res = ""			
+			self.children.map{|l| res += l.walk_tree}
+ 			res += RubyScadBridge.new.render
+			res		
+		end	
+
+	end
+	
+	def render(args={})
+		return Render.new(self,args)		
+	end
 
 
 	class CSGModifier < Primitive
