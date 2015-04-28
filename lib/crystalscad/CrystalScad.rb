@@ -300,12 +300,20 @@ module CrystalScad
 	end
 
 	def optimize_union(top, child)
-
 		if top.kind_of? Union and not child.kind_of? Union
 			top.children << child
 			return top
 		else
 			return Union.new(top,child)
+		end
+	end
+
+	def optimize_difference(top, child)
+		if top.kind_of? Difference and not child.kind_of? Difference
+			top.children << child
+			return top
+		else
+			return Difference.new(top,child)
 		end
 	end
 
@@ -339,7 +347,7 @@ module CrystalScad
 			end
 			r
 		else
-			Difference.new(self,args)
+			optimize_difference(self,args)
 		end
 	end
 	
