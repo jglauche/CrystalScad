@@ -581,8 +581,14 @@ module CrystalScad
 	def save_all(class_name,fn=$fn)
 
 		res = class_name.send :new
+
+		# skip defined classes
+		skip = class_name.send :get_skip
+		skip = [] if skip == nil
+
 		# regexp for output* view* show* 
 		res.methods.grep(Regexp.union(/^output/,/^view/,/^show/)).each do |i|
+			next if skip.include? i.to_s
 			output = nil
 
 			res.send :initialize # ensure default values are loaded at each interation

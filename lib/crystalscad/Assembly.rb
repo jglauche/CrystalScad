@@ -15,11 +15,11 @@
 
 module CrystalScad
 	class Assembly
-		attr_accessor :height,:x,:y,:z
+		attr_accessor :height,:x,:y,:z,:skip
 
 	  def initialize(args={})
 	    @args = args if @args == nil
-		
+			
 			@x = args[:x]
 			@y = args[:y]
 			@z = args[:z]
@@ -98,6 +98,24 @@ module CrystalScad
 			end
 
 			return a
+		end
+
+		# Makes the save_all method in CrystalScad skip the specified method(s)
+		def self.skip(args)
+		@skip = [] if @skip == nil
+			if args.kind_of? Array
+				args.each do |arg|
+					skip(arg)
+				end
+				return
+			end			
+				
+			@skip << args.to_s
+			return
+		end
+
+		def self.get_skip
+			@skip		
 		end
 
 	end
