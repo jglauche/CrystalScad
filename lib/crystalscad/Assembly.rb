@@ -15,7 +15,7 @@
 
 module CrystalScad
 	class Assembly
-		attr_accessor :height,:x,:y,:z,:skip
+		attr_accessor :height,:x,:y,:z,:skip,:color
 
 	  def initialize(args={})
 	    @args = args if @args == nil
@@ -116,6 +116,16 @@ module CrystalScad
 
 		def self.get_skip
 			@skip		
+		end
+
+		def color(args)
+			@color = args
+			return self
+		end
+
+		def colorize(res)
+			return res if @color == nil
+			return res.color(@color)
 		end
 
 	end
