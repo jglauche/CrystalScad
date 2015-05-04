@@ -118,6 +118,25 @@ module CrystalScad
 			@skip		
 		end
 
+
+		def self.view(args)
+			@added_views = [] if @added_views == nil
+			if args.kind_of? Array
+				args.each do |arg|
+					view(arg)
+				end
+				return
+			end			
+				
+			@added_views << args.to_s
+			return
+		end
+
+		def self.get_views
+			@added_views || []
+		end
+
+
 		def color(args)
 			@color = args
 			return self

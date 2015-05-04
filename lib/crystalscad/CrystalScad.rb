@@ -585,9 +585,10 @@ module CrystalScad
 		# skip defined classes
 		skip = class_name.send :get_skip
 		skip = [] if skip == nil
+		added_views = class_name.send :get_views
 
 		# regexp for output* view* show* 
-		res.methods.grep(Regexp.union(/^output/,/^view/,/^show/)).each do |i|
+		(res.methods.grep(Regexp.union(/^output/,/^view/,/^show/)) + added_views).each do |i|
 			next if skip.include? i.to_s
 			output = nil
 
