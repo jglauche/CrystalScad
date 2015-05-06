@@ -322,11 +322,11 @@ module CrystalScad
 		if args.kind_of? Array
 			r = self			
 			args.each do |a|
-				if a.respond_to? :show
-					r = Union.new(r,a.show)	
-				else
+			#	if a.respond_to? :show
+			#		r = Union.new(r,a.show)	
+			#	else
 					r = Union.new(r,a)	
-				end
+			#	end
 			end
 			r
 		else
@@ -339,11 +339,11 @@ module CrystalScad
 		if args.kind_of? Array
 			r = self			
 			args.each do |a|
-				if a.respond_to? :output
-					r = Difference.new(r,a.output)	
-				else	
+				#if a.respond_to? :output
+				#	r = Difference.new(r,a.output)	
+				#else	
 					r = Difference.new(r,a)	
-				end
+				#end
 			end
 			r
 		else
@@ -585,6 +585,7 @@ module CrystalScad
 		# skip defined classes
 		skip = class_name.send :get_skip
 		skip = [] if skip == nil
+		skip << "show_hardware"
 		added_views = class_name.send :get_views
 
 		# regexp for output* view* show* 

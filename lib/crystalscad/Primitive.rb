@@ -8,6 +8,7 @@ module CrystalScad
 		  if args[:z] == nil
 		    args[:z] = 0
 		  end
+			@transformations ||= []				
 			@transformations << Rotate.new(args)	
 			self
 		end
@@ -18,16 +19,19 @@ module CrystalScad
 		end
 
 		def translate(args)
+			@transformations ||= []				
 			@transformations << Translate.new(args)		
-			self			
+			self		
 		end
 		
 		def union(args)
+			@transformations ||= []				
 			@transformations << Union.new(args)		
 			self			
 		end
 
 		def mirror(args)
+			@transformations ||= []				
 			@transformations << Mirror.new(args)		
 			self			
 		end
@@ -36,6 +40,7 @@ module CrystalScad
 			if args.kind_of? Numeric or args.kind_of? Array
 					args = {v:args}
 			end
+			@transformations ||= []				
 			@transformations << Scale.new(args)		
 			self			
 		end

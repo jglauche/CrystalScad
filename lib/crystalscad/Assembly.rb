@@ -14,8 +14,17 @@
 #    along with CrystalScad.  If not, see <http://www.gnu.org/licenses/>.
 
 module CrystalScad
-	class Assembly
-		attr_accessor :height,:x,:y,:z,:skip,:color
+	class Assembly < CrystalScad::Primitive
+		attr_accessor :height,:x,:y,:z,:skip,:color,:hardware,:transformations
+
+		def transform(obj)	
+			return obj if @transformations == nil
+			@transformations.each do |t|
+				obj.transformations << t
+			end
+			
+			return obj
+		end
 
 	  def initialize(args={})
 	    @args = args if @args == nil
@@ -39,11 +48,11 @@ module CrystalScad
 	  end
 	  
 	  def show
-	    part(true)
+	    transform(part(true))
 	  end
 	  
 	  def output
-	    part(false)
+	    transform(part(false))
 	  end
 
 		def part(show=false)
@@ -65,18 +74,6 @@ module CrystalScad
 	  def *(args)
 	    return self.output*args
 	  end
-	  
-	  def translate(args)
-	    return self.output.translate(args)
-	  end 
-
-	  def mirror(args)
-	    return self.output.mirror(args)
-	  end 
-
-	  def rotate(args)
-	    return self.output.rotate(args)
-	  end 
 
 	  def scad_output()
 	    return self.output.scad_output
@@ -145,6 +142,15 @@ module CrystalScad
 		def colorize(res)
 			return res if @color == nil
 			return res.color(@color)
+		end
+
+		def show_hardware
+			return nil if @hardware == nil or @hardware == []
+			res = nil			
+			@hardware.each do |part|
+				res += part.show
+			end
+			transform(res)
 		end
 
 	end

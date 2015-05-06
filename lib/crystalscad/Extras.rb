@@ -65,7 +65,6 @@ module CrystalScad::Extras
 		res = cube(([x,y,height]))
 		res -= cylinder(d:0.9,h:height*1.42,fn:16).rotate(y:45).translate(x:0)
 		res -= cylinder(d:0.9,h:height*1.42,fn:16).rotate(y:-45).translate(x:1.5)
-
 		res
 	end
 	

@@ -1,8 +1,8 @@
 require 'crystalscad/version'
 require 'crystalscad/BillOfMaterial'
 require 'crystalscad/CrystalScadObject'
-require 'crystalscad/Assembly'
 require 'crystalscad/Primitive'
+require 'crystalscad/Assembly'
 require 'crystalscad/Hardware'
 
 require 'crystalscad/LinearBearing'

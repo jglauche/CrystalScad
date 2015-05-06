@@ -15,17 +15,7 @@
 
 module CrystalScad::Hardware 
 
-	class Hardware < CrystalScad::Primitive
-		attr_accessor :transformations, :height
-
-		def transform(obj)	
-			@transformations.each do |t|
-				obj.transformations << t
-			end
-			
-			return obj
-		end
-  			
+	class Hardware < CrystalScad::Assembly
 	end
 
 	class Bolt	< Hardware
