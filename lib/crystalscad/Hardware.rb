@@ -215,6 +215,9 @@ module CrystalScad::Hardware
 			@type = args[:type] ||= "934"
 			@material = args[:material] ||= "8.8"
 			@surface = args[:surface] ||= "zinc plated"
+			@support = args[:support] ||= false
+			@support_layer_height = args[:support_layer_height] ||= 0.2
+
 
 			@transformations ||= []
 			@args = args
@@ -248,14 +251,13 @@ module CrystalScad::Hardware
 			@s = chart_934[@size][:side_to_side]
 			@height = chart_934[@size][:height]
 			@support_diameter = chart_934[@size][:support_diameter]
-
 			if @type == "985"
 				@height = chart_985[@size][:height]			
 			end
 	
 		end
 
-		def add_support(layer_height=0.2)
+		def add_support(layer_height=@support_layer_height)
 			res = cylinder(d:@support_diameter,h:@height-layer_height)
 			# on very small nuts, add a support base of one layer height, so the support won't fall over
 			if @size < 6 
@@ -276,9 +278,12 @@ module CrystalScad::Hardware
 
 		def nut_934(show=true,margin=0)		
 			@s += margin
-			nut=cylinder(d:(@s/Math.sqrt(3))*2,h:@height,fn:6)
-			nut-=cylinder(d:@size,h:@height) if show == true
-			nut.color("Gainsboro")
+			res = cylinder(d:(@s/Math.sqrt(3))*2,h:@height,fn:6)
+			res -= cylinder(d:@size,h:@height) if show == true
+		 	if @support
+				res -= add_support			
+			end 	
+			res.color("Gainsboro")
 		end	
 
 	end
