@@ -8,9 +8,9 @@ require "thor/actions"
 class CrystalGen < Thor                                     
 	include Thor::Actions
 
-  desc "project APP_NAME", "creates a new project stub"  
+  desc "new APP_NAME", "creates a new project stub" 
 
-  def project(name)
+  def new(name)
 
 		create_file("#{name}/#{name}.rb") do
 "#!/usr/bin/ruby1.9.3
@@ -30,10 +30,8 @@ require_all \"lib/**/*.rb\"
 # Design -> Automatic Reload and Compile 
 # activated. 
  
-
-res = #{name.capitalize}Assembly.new.show
-
-res.save(\"#{name}.scad\",\"$fn=64;\")
+# Scans every file in lib/**/*.rb for classes and saves them in the output/ directory
+save!
 
 @@bom.save(\"bom.txt\")
 
@@ -50,9 +48,30 @@ res.save(\"#{name}.scad\",\"$fn=64;\")
 		
 		create_file("#{name}/lib/assemblies/#{name}_assembly.rb") do
 "class #{name.capitalize}Assembly < CrystalScad::Assembly
+		
+	# Assemblies are used to show how different parts interact on your design.
+ 
+	# Skip generation of the 'output' method for this assembly.
+	# (will still generate 'show')
+	skip :output
 
 	def part(show)
-		res = TestCube.new.show
+		# Create a test cube
+		cube = TestCube.new
+
+		# And another one, but translate this one next to the cube and change the color
+		# You can use any transformation on the class itself. 
+		another_cube = TestCube.new.translate(z:cube.z).color(\"MediumTurquoise\")	
+
+		# We're calling the show method on both cubes
+		res = cube.show
+		res += another_cube.show		
+
+		# There's a bolt going through the cubes and a nut on the bottom. Let's show it
+		res += cube.show_hardware
+
+		# always make sure the lowest statement always returns the object that you're working on
+		res
 	end
 
 end
@@ -62,11 +81,59 @@ end
 		create_file("#{name}/lib/printed/testcube.rb") do 
 "class TestCube < CrystalScad::Printed
 	def initialize()
-		@size = [20,20,10]
+		# Here is a good place to define instance variables that make your part parametric.
+		# These variables are acessable from outside:
+		@x = 25
+		@y = 25
+		@z = 20
+		@hardware = []
+		@color = \"BurlyWood\"
+
+		# The variable below is not accessable from the outside unless you specify so with attr_accessable
+		@diameter = 10
+	end
+	
+	def part(show)
+		# We start with a cube and center it in x and y direction. The cube starts at z = 0 with this.
+		res = cube(@x,@y,@z).center_xy
+		
+		# We want a bolt to go through it. It will be facing upwards however, so we will need to mirror it. 
+		# Also translating it to twice the height, as we want to stack two of these cubes together in the assembly.
+		bolt = Bolt.new(4,40).mirror(z:1).translate(z:@z*2)		
+		@hardware << bolt
+		
+		# We also want a nut. And since the printing direction is from the bottom, we decide to add support to it.  
+		nut = Nut.new(4,support:true,support_layer_height:0.3)		
+		@hardware << nut
+
+		# substracting the @hardware array will call the .output method on each hardware item automatically
+		res -= @hardware
+
+		# colorize is a convenience thing to colorize your part differently in assemblies. 
+		# You can specify @color in initalize (as default color), or set a different color in the assembly this way.  
+		res = colorize(res)
+
+		# Note: Make sure you do this before adding parts (i.e. hardware) that have their own color and that 
+		#				you do not want to colorize.
+
+		# You can go ahead and show the hardware when the part produces its 'show' output file by uncommenting this:
+		#		res += @hardware if show
+		# However, in this example, the Assembly file calls show_hardware in order to not show it twice.
+
+		# always make sure the lowest statement always returns the object that you're working on
+		res
 	end
 
-	def part(show)
-		cube(@size)
+	# with view you can define more outputs of a file.
+	# This is useful when you are designing subassemblies of an object.
+	view :my_subassembly
+
+	def my_subassembly
+		res = hull(
+			cylinder(d:@diameter,h:@z),
+			cube(@x,@y,@z)				
+			)	
+		res
 	end
 
 end	
@@ -77,10 +144,6 @@ end
 "
 system(\"./#{name}.rb\")
 watch( \'#{name}.rb' )  {|md|
-   system(\"./#{name}.rb\")
-}
-
-watch( 'lib/(.*)\.rb' )  {|md|
    system(\"./#{name}.rb\")
 }
 

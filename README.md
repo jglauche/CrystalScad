@@ -29,7 +29,7 @@ Getting started
 ===========
 CrystalSCAD comes with a generator that generates project stubs automatically for you. Run this command from a terminal in the directory that you want to create a project:
 
-### \# crystalgen project [my_project_name]
+### \# crystalgen new [my_project_name]
 Change [my_project_name] to the name of your project
 
 A project named "my_project" will create those files and directories:
