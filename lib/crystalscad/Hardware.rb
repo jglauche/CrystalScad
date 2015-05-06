@@ -15,8 +15,20 @@
 
 module CrystalScad::Hardware 
 
-	class Bolt	< CrystalScad::Primitive
-		attr_accessor :transformations
+	class Hardware < CrystalScad::Primitive
+		attr_accessor :transformations, :height
+
+		def transform(obj)	
+			@transformations.each do |t|
+				obj.transformations << t
+			end
+			
+			return obj
+		end
+  			
+	end
+
+	class Bolt	< Hardware
 
 		def initialize(size,length,args={})
 			@args = args
@@ -86,14 +98,6 @@ module CrystalScad::Hardware
 			transform(res)			
 		end 
 
-		def transform(obj)	
-			@transformations.each do |t|
-				obj.transformations << t
-			end
-			
-			return obj
-		end
-  
     # ISO 7380
   	def bolt_7380(additional_length=0, addtional_diameter=0)
 	    chart_iso7380 = {
@@ -173,7 +177,7 @@ module CrystalScad::Hardware
 	  
 	end
 	
-	class Washer	< CrystalScad::Assembly
+	class Washer	< Hardware
 		def initialize(size,args={})
 			@args=args			
 			@size = size
@@ -197,7 +201,7 @@ module CrystalScad::Hardware
 			end			
 			@height = @chart_din125[@size][:height]
 			
-
+			@transformations ||= []
 		end
 
 		def description
@@ -209,11 +213,12 @@ module CrystalScad::Hardware
 			washer = cylinder(d:@chart_din125[@size][:outer_diameter].to_f,h:@chart_din125[@size][:height].to_f)
 			washer-= cylinder(d:@size,h:@chart_din125[@size][:outer_diameter].to_f+0.2).translate(z:-0.1)
 			washer.color("Gainsboro")
+			transform(washer)
 		end
 
 	end
 
-	class Nut < CrystalScad::Assembly
+	class Nut < Hardware
 		attr_accessor :height
 		def initialize(size,args={})
 			@size = size
@@ -221,6 +226,7 @@ module CrystalScad::Hardware
 			@material = args[:material] ||= "8.8"
 			@surface = args[:surface] ||= "zinc plated"
 
+			@transformations ||= []
 			@args = args
 			prepare_data
 		end
@@ -269,12 +275,12 @@ module CrystalScad::Hardware
 
 		def output(margin=0.3)	
 			add_to_bom
-			return nut_934(false,margin)
+			return transform(nut_934(false,margin))
 		end
 
 		def show
 			add_to_bom
-			return nut_934
+			return transform(nut_934)
 		end
 
 		def nut_934(show=true,margin=0)		
