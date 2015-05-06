@@ -105,7 +105,7 @@ module CrystalScad
 		end	
 	end
 
-	def cube(args={})
+	def cube(args={},y=nil,z=nil)
 		if args.kind_of? Array
 			args = {size:args}
 		elsif args.kind_of? Hash
@@ -113,6 +113,9 @@ module CrystalScad
 		  args[:y] ||= 0
 		  args[:z] ||= 0
 		  args = {size:[args[:x],args[:y],args[:z]]}		
+		elsif args.kind_of? Numeric
+			x = args
+			args = {size:[x,y,z]}
 		end	
 		Cube.new(args)	
 	end
@@ -573,6 +576,10 @@ module CrystalScad
   end
 
 		
+	def save!
+		Dir.glob("lib/**/*.rb").map{|l| get_classes_from_file(l)}.flatten.map{|l| save_all(l)}
+	end
+
 	# Saves all files generated of a CrystalScad file
 	# Saves outputs of 
 	# - show
