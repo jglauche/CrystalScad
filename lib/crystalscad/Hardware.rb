@@ -229,6 +229,7 @@ module CrystalScad::Hardware
 			@transformations ||= []
 			@args = args
 			prepare_data
+			@height = args[:height] || @height 
 		end
 
 		def description
