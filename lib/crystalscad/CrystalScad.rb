@@ -64,6 +64,30 @@ module CrystalScad
 	end
 
 	def cylinder(args)
+		# inner diameter handling
+		if args[:id]		
+			id = args.delete(:id)	
+			args2 = args.dup
+			args2[:d] = id
+
+			if args[:ih]
+				# if it has an inner height, add a tiny bit to the bottom
+				ih = args.delete(:ih)
+				args2[:h] = ih + 0.01
+			else	
+				# otherwise add to both bottom and top to make a clear cut in OpenSCAD
+				args2[:h] += 0.02
+			end
+
+			# if we have a ifn value, change the fn value of the inner cut
+			if args[:ifn]
+				ifn = args.delete(:ifn)
+				args2[:fn] = ifn			
+			end
+
+			return cylinder(args) - cylinder(args2).translate(z:-0.01)
+		end
+	
 		Cylinder.new(args)		
 	end
 	
