@@ -15,7 +15,12 @@
 
 module CrystalScad
 	class Assembly < CrystalScad::Primitive
-		attr_accessor :height,:x,:y,:z,:skip,:color,:hardware,:transformations
+		attr_accessor 	:x,:y,:z,:skip,:color,:hardware,:transformations
+
+		def method_missing(method, *args, &block)	
+			eval( "def #{method}() @#{method}; end" )
+			return self.send(method, *args, &block)
+		end
 
 		def transform(obj)	
 			return obj if @transformations == nil
@@ -134,7 +139,7 @@ module CrystalScad
 		end
 
 
-		def color(args)
+		def color(args={})
 			@color = args
 			return self
 		end
