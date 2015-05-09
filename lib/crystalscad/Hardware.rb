@@ -217,8 +217,11 @@ module CrystalScad::Hardware
 			@surface = args[:surface] ||= "zinc plated"
 			@support = args[:support] ||= false
 			@support_layer_height = args[:support_layer_height] ||= 0.2
+			@margin = args[:margin] ||= 0.3 # default output margin
 
-
+			@slot = args[:slot] || nil
+			@slot_direction = args[:slot_direction] || "z"
+	
 			@transformations ||= []
 			@args = args
 			prepare_data
@@ -266,9 +269,36 @@ module CrystalScad::Hardware
 			res
 		end
 
-		def output(margin=0.3)	
+		def slot
+			case @slot_direction	
+				when "x" 
+					pos = {x:@slot}
+				when "y"
+					pos = {y:@slot}
+				when "z"
+					pos = {z:@slot}
+				when "-x" 
+					pos = {x:-@slot}
+				when "-y"
+					pos = {y:-@slot}
+				when "-z"
+					pos = {z:-@slot}
+				else
+				raise "Invalid slot direction #{@slot_direction}"
+			end
+			hull(
+				nut_934(false,@margin),
+				nut_934(false,@margin).translate(pos)
+			)					
+		end
+
+		def output	
 			add_to_bom
-			return transform(nut_934(false,margin))
+			if @slot == nil
+				return transform(nut_934(false,@margin))			
+			else	
+				return transform(slot)
+			end
 		end
 
 		def show
