@@ -86,7 +86,7 @@ module CrystalScad::ScrewThreads
 	end
 
 	def create_bolts(face,obj1,obj2,args={})
-		# make a obj1-=obj2 with bolts corresponding to the heigh tof obj1
+		# make a obj1-=obj2 with bolts corresponding to the height of obj1
 		
 		if face == nil or obj1 == nil or obj2 == nil
 			raise "usage: create_bolts(face,obj1,obj2,args={})  - args can include (obj1.)height and bolt_height"

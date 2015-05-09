@@ -227,10 +227,40 @@ module CrystalScad::Hardware
 			@args = args
 			prepare_data
 			@height = args[:height] || @height 
+
+			@direction = args[:direction] || @slot_direction 
+
+			@bolt = nil
+
 		end
 
 		def description
 			"M#{@size} Nut, DIN #{@type}, #{@material} #{@surface}"
+		end
+
+		def bolt(length=nil, args={})
+			return @bolt if @bolt
+			@bolt = Bolt.new(@size,length,args)
+			case @direction
+				when "z"
+					bolt.transformations << Rotate.new(x:180)	
+					bolt.transformations << Translate.new({z:length	})		
+				when "-z"
+					bolt.transformations << Translate.new({z:-length+@height})		
+				when "-x"
+					bolt.transformations << Rotate.new(x:180)	
+					bolt.transformations << Translate.new({z:length+@height})		
+				when "x"
+					bolt.transformations << Translate.new({z:-length+@height})		
+				when "-y"
+					bolt.transformations << Rotate.new(x:180)	
+					bolt.transformations << Translate.new({z:length+@height})		
+				when "y"
+					bolt.transformations << Translate.new({z:-length+@height})		
+			end			
+			@bolt.transformations += self.transformations.dup
+			
+			return @bolt
 		end
 
 		def prepare_data
