@@ -221,7 +221,8 @@ module CrystalScad::Hardware
 
 			@slot = args[:slot] || nil
 			@slot_direction = args[:slot_direction] || "z"
-	
+			@cylinder_length = args[:cylinder_length] || 0	# for slot only
+
 			@transformations ||= []
 			@args = args
 			prepare_data
@@ -286,10 +287,14 @@ module CrystalScad::Hardware
 				else
 				raise "Invalid slot direction #{@slot_direction}"
 			end
-			hull(
+			res = hull(
 				nut_934(false,@margin),
 				nut_934(false,@margin).translate(pos)
-			)					
+			)				
+			if @cylinder_length > 0
+				res += cylinder(d:@size+@margin,h:@cylinder_length)			
+			end	
+			res	
 		end
 
 		def output	
