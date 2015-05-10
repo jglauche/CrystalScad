@@ -23,7 +23,7 @@ module CrystalScad
 			@transformations << Translate.new(args)		
 			self		
 		end
-		
+	
 		def union(args)
 			@transformations ||= []				
 			@transformations << Union.new(args)		
@@ -43,6 +43,13 @@ module CrystalScad
 			@transformations ||= []				
 			@transformations << Scale.new(args)		
 			self			
+		end
+
+		# copies the transformation of obj to self
+		def transform(obj)
+			@transformations ||= []
+			@transformations += obj.transformations
+			self
 		end
 
 
