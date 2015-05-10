@@ -249,12 +249,12 @@ module CrystalScad::Hardware
 					bolt.transformations << Translate.new({z:-length+@height})		
 				when "-x"
 					bolt.transformations << Rotate.new(x:180)	
-					bolt.transformations << Translate.new({z:length+@height})		
+					bolt.transformations << Translate.new({z:length})		
 				when "x"
 					bolt.transformations << Translate.new({z:-length+@height})		
 				when "-y"
 					bolt.transformations << Rotate.new(x:180)	
-					bolt.transformations << Translate.new({z:length+@height})		
+					bolt.transformations << Translate.new({z:length})		
 				when "y"
 					bolt.transformations << Translate.new({z:-length+@height})		
 			end			
