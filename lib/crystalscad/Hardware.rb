@@ -220,6 +220,7 @@ module CrystalScad::Hardware
 			@margin = args[:margin] ||= 0.3 # default output margin
 
 			@slot = args[:slot] || nil
+			@slot_margin = args[:slot_margin] || 0.5
 			@slot_direction = args[:slot_direction] || "z"
 			@cylinder_length = args[:cylinder_length] || 0	# for slot only
 
@@ -318,8 +319,8 @@ module CrystalScad::Hardware
 				raise "Invalid slot direction #{@slot_direction}"
 			end
 			res = hull(
-				nut_934(false,@margin),
-				nut_934(false,@margin).translate(pos)
+				nut_934(false,@margin,@slot_margin),
+				nut_934(false,@margin,@slot_margin).translate(pos)
 			)				
 			if @cylinder_length > 0
 				res += cylinder(d:@size+@margin,h:@cylinder_length)			
@@ -341,9 +342,10 @@ module CrystalScad::Hardware
 			return transform(nut_934)
 		end
 
-		def nut_934(show=true,margin=0)		
+		def nut_934(show=true,margin=0,height_margin=0)		
 			@s += margin
-			res = cylinder(d:(@s/Math.sqrt(3))*2,h:@height,fn:6)
+			
+			res = cylinder(d:(@s/Math.sqrt(3))*2,h:@height+height_margin,fn:6)
 			res -= cylinder(d:@size,h:@height) if show == true
 		 	if @support
 				res -= add_support			
