@@ -16,7 +16,7 @@
 
 
 module CrystalScad
-	class Pipe
+	class Pipe < Assembly
 		attr_accessor :x,:y, :sum_x, :sum_y, :pipe, :bent_segments
 		# Warning: sum_x and sum_y are both a quick hack at the moment
 		# 				 They will ONLY work on bends if you do same thing in the other direction 
