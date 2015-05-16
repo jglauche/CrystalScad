@@ -200,9 +200,12 @@ module CrystalScad
 				
 	end
 
-	def square(args)
+	def square(args,y=nil)
 		if args.kind_of? Array
 			args = {size:args}
+		elsif args.kind_of? Numeric
+			x = args
+			args = {size:[x,y]}			
 		elsif args.kind_of? Hash
 		  unless args[:size]
 		    args[:x] ||= 0
