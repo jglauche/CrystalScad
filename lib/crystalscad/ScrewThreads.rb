@@ -167,6 +167,8 @@ module CrystalScad::ScrewThreads
 					bolt.transformations << Rotate.new(x:90)						
 					bolt.transformations << Translate.new({x:hole.x,y:hole.y+height,z:hole.z})		
 			end
+			bolt.transformations += obj2.transformations unless obj2.transformations == nil
+		
 
 			ret << bolt
 		end
