@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Awesome Presentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { 
+				font-family: 'Ubuntu Mono'; 
+				font-weight: bold;
+				background-color: #CDCDCD !important;
+			}
+ 
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 2.4em; }
+      .remark-slide-content h2 { font-size: 1.6em; }
+      .remark-slide-content h3 { font-size: 1.3em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(160,160,255);
+        text-decoration: none;
+      }
+      code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #000000;
+        border-radius: 5px;
+      }
+
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+				text-align: left;
+				padding-left:50px;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #ffffff;
+        text-shadow: 0 0 20px #333;
+				background-repeat: no-repeat;
+      }
+      .inverse2 {
+        background: #272822;
+        color: #ffffff;
+				font-size: 27px;
+       	text-shadow: 0 0 20px #333;
+				background-repeat: no-repeat;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+
+
+      /* Two-column layout */
+      .left {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left h2:last-of-type, .left h3:last-child {
+          color: #c5c5c5;
+        }
+      .right {
+        width: 75%;
+				float: right;
+        padding-top: 1em;
+      }
+			.bottom{
+				clear: both;			
+			}
+     .counter {
+        position: absolute;
+        bottom: 1em;
+      }
+   </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+# CrystalSCAD Installation
+Please make sure you have these packages installed on your system:
+
+## Requirements: 
+- ruby >= 1.9.3
+- rubygems (optional)
+- OpenSCAD
+---
+# Installation via rubygems
+In your terminal, write:
+```sh
+sudo gem install crystalscad
+```
+
+If you have a system with more than one rubygems installation (especially pre-1.9.3) you might need to replace 'gem' with 'gem1.9' or 'gem1.9.3' depending on how it is installed.
+
+---
+# Creating a project
+In your terminal, write:
+```sh
+crystalgen new <project name>
+
+```
+This will generate a new project directory in the directory you are in.
+
+## Example
+```sh
+$ crystalgen new hello_world
+      create  hello_world/hello_world.rb
+       chmod  hello_world/hello_world.rb
+      create  hello_world/lib/assemblies
+      create  hello_world/lib/electronics
+      create  hello_world/lib/hardware
+      create  hello_world/lib/printed
+      create  hello_world/lib/lasercut
+      create  hello_world/output
+      create  hello_world/lib/assemblies/hello_world_assembly.rb
+      create  hello_world/lib/printed/testcube.rb
+      create  hello_world/hello_world.observr
+```
+A lot of files were just created. We will look into those later.
+---
+# Your first project
+After you have created your project, go to your project folder in the terminal.
+```sh
+cd <project name>
+```
+## Example
+```sh
+$ cd hello_world
+```
+In this example, we have two files called hello_world.rb and hello_world.observr in that directory.
+
+You can try to run the first one now.
+```sh
+$ ./hello_world.rb
+```
+If it doesn't give you an output, it ran successfully. Note the .scad files in the output/ directory.
+
+If it gives an error at this point, see the next page
+
+---
+# Troubleshooting
+
+If you see an error message like this:
+```sh
+bash: ./hello_world.rb: /usr/bin/ruby1.9.3: bad interpreter: No such file or directory
+```
+
+You can either run the file with your ruby interpreter, for example:
+```sh
+ruby hello_world.rb
+```
+
+or (recommended) change the path to the ruby interpreter in your project file (hello_world.rb in this example).
+to do that, change the first line of your project file
+```c
+#!/usr/bin/ruby1.9.3
+```
+
+---
+# File Observer
+If you don't want to re-run the project file every time you change the code, you can use a tool called 'observr' to automatically generate new .scad files from your code.
+### Syntax:
+```sh
+observr <project_name>.observr
+```
+### Example:
+```sh
+$ observr hello_world.observr
+```
+This will run until you stop it (for example with ctrl+c). It does not give an output on success, 
+but will return an error message every time there's something wrong with your code.
+
+---
+# The lib directory [1/2]
+When you look in the lib/ directory in your project directory you will find several subdirectories:
+
+```sh
+$ cd lib
+$ ls
+assemblies  electronics  hardware  lasercut  printed
+```
+Of those, the directories assemblies and printed have some files in them. Let's have a quick overview about the intended purpose of each directory:
+
+### assemblies
+This is where you can combine multiple parts into one block. It is not mandatory to do this, but it might come in handy if you want to visualize parts that interact with each other.
+
+### electronics
+This is where you should put representations of your electronic parts
+
+---
+# The lib directory [2/2]
+
+### hardware
+This is where any (non-fabricated) mechanical parts you use in your project go
+
+### lasercut
+This is where you can put in lasercut sheets
+
+### printed
+This is where you define your 3D printed parts
+
+## Note:
+It is not mandatory to use the given directory structure. I made it that way to make it easier to reuse once defined components in other projects. 
+
+---
+# Output files [1/3]
+After your have run your project file or the observer, there will be .scad files in the output/ directory.
+	
+```sh
+$ ls -1
+Hello_worldAssembly_show.scad
+TestCube_my_subassembly.scad
+TestCube_output.scad
+TestCube_show.scad
+```
+
+This requires a bit of explanation.
+
+The file 'Hello_worldAssembly_show.scad' in this example is generated by hello_world_assembly.rb in lib/assemblies/
+
+Every file usually outputs two files:
+- filename_show.scad
+- filename_output.scad
+
+
+---
+# Output files [2/3]
+The assembly has produced only one file! Looking into the file hello_world_assembly.rb gives us the reason:
+```ruby
+	skip :output
+```
+This means that it skips the output method on file generation. Simple!
+
+But... what about the TestCube file that generated 3 files? 
+
+Again, have a look into the file testcube.rb in lib/printed/
+
+```ruby
+	view :my_subassembly
+
+	def my_subassembly
+		[...]
+	end
+```
+This adds another output to the testcube file in addition to the ones that are generated by default (show and output).
+You can add as many "views" as you like to an object. This can be handy if you have complex parts or just want to 
+work on subassemblies inside a part.
+---
+# Output files [3/3]
+
+If you had a look at the examples yet, you might have noticed that none of the files actually define 'show' or 'output' but instead do this:
+```ruby
+	def part(show)
+	 	[...]
+	end
+```
+This method can produce both show and output. The show variable is set to true when the 'show' output is generated, otherwise false. You can also instead define your own show or output methods:
+```ruby
+	def show
+		[...]
+	end
+```
+```ruby
+	def output
+		[...]
+	end
+```
+
+
+
+    </textarea>
+    <script src="out/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
