@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Awesome Presentation</title>
+    <title>CrystalSCAD Manual</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style type="text/css">
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -233,6 +233,8 @@ $ observr hello_world.observr
 This will run until you stop it (for example with ctrl+c). It does not give an output on success, 
 but will return an error message every time there's something wrong with your code.
 
+*Note:* The observer has to be restarted when you create a new file.
+
 ---
 # The lib directory [1/2]
 When you look in the lib/ directory in your project directory you will find several subdirectories:
@@ -328,6 +330,27 @@ This method can produce both show and output. The show variable is set to true w
 		[...]
 	end
 ```
+---
+# Small introduction to ruby
+TODO: variables, comments, class inheritance?
+
+---
+# Primitives
+## Cube
+Creates a cube at the origin of the coordinate system.
+
+```ruby
+# 2D modeling
+cube(x: value , y: value)
+
+# 3D modeling
+cube(x: value , y: value, z: value)
+
+# also accepts size, which will make a cube with x,y,z = 1
+cube(size: 1)
+```
+### Centering
+
 
 
 
