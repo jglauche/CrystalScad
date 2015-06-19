@@ -330,14 +330,12 @@ module CrystalScad
 	end
 
 	def optimize_union(top, child)
-		return Union.new(top,child) # disabled for now
-# FIXME https://github.com/Joaz/CrystalScad/issues/5
-#		if top.kind_of? Union and not child.kind_of? Union
-#			top.children << child
-#			return top
-#		else
-#			return Union.new(top,child)
-#		end
+		if top.kind_of? Union and not child.kind_of? Union and top.transformations.to_a.size == 0
+			top.children << child
+			return top
+		else
+			return Union.new(top,child)
+		end
 	end
 
 	def optimize_difference(top, child)
