@@ -335,6 +335,33 @@ This method can produce both show and output. The show variable is set to true w
 TODO: variables, comments, class inheritance?
 
 ---
+# Units
+
+All units are mm by default. 
+
+###Note on how Ruby casts numeric values:
+
+```ruby
+@foo = 11 # Casts as Integer
+@bar = 11.0 # Casts as Decimal
+
+```
+This is important if you devide by an Integer, for example:
+```ruby
+@foo / 2 # results in 5
+@bar / 2 # results in 5.5
+```
+As good practice, you should divide by a Decimal, which will cast the Integer to Decimal:
+```ruby
+@foo / 2.0 # results in 5.5
+@bar / 2.0 # results in 5.5
+```
+
+
+
+
+
+---
 # Primitives
 ## Cube
 Creates a cube at the origin of the coordinate system.
@@ -350,6 +377,32 @@ cube(x: value , y: value, z: value)
 cube(size: 1)
 ```
 ### Centering
+You can put one of these methods directly after the cube method:
+```ruby
+cube(size: 1).center # Center in X,Y and Z
+cube(size: 1).center_x # Center in X
+cube(size: 1).center_y # Center in Y
+cube(size: 1).center_xy # Center in X and Y
+cube(size: 1).center_z # Center Z
+
+```
+---
+## Cylinder
+Creates a cylinder centered in X & Y
+```ruby
+cylinder(d:5,h:10) # Creates a cylinder with diameter 5 and height 10
+```
+parameters:
+```ruby
+r: radius
+d: diameter
+h: height
+```
+
+
+
+---
+
 
 
 
