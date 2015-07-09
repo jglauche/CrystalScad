@@ -40,9 +40,5 @@ module CrystalScad
       file.puts scad_output
       file.close		
 		end
-
-		def method_missing(meth, *args, &block)		
-		end
-	
 	end
 end
