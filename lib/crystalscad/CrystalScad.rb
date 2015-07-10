@@ -544,16 +544,23 @@ module CrystalScad
 	end
 
 
-	#	Stacks parts along the Z axis
+	#	Deprecated: Stacks parts along the Z axis
 	# works on all Assemblies that have a @height definition
+	# TODO: Make a better functionality similar to this, that is:
+	#				- easier to use
+	#				- throws better error messages
+	#				- doesn't assume that everything falls down like gravity in every case		
 	def stack(args={}, *parts)
 		args[:method] ||= "show"
-		args[:additional_spacing] ||= 0
+		args[:spacing] ||= 0
+		puts "CrystalScad Warning: Please note that the stack method is deprecated and will be removed or replaced in the future"
 		@assembly = nil		
 		z = 0
 		parts.each do |part|
-			@assembly += (part.send args[:method]).translate(z:z)
-			z+= part.height	+ args[:additional_spacing]
+			item = (part.send args[:method])
+			next if item == nil or !item.respond_to? "translate"
+			@assembly += item.translate(z:z)
+			z+= part.height	+ args[:spacing]
 		end
 		@assembly
 	end
