@@ -13,7 +13,7 @@ class CrystalGen < Thor
   def new(name)
 
 		create_file("#{name}/#{name}.rb") do
-"#!/usr/bin/ruby1.9.3
+"#!/usr/bin/env ruby
 require \"rubygems\"
 require \"crystalscad\"
 require \"require_all\"
