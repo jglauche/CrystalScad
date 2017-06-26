@@ -10,13 +10,11 @@ Installation:
 
 Dependencies:
 
-- Ruby 1.9.3
+- ruby 2 or higher
 - rubygems
 
 Install via gem:
 ### \# gem install crystalscad
-
-if you have multiple ruby versions, you likely need to use gem1.9.3 instead of gem.
 
 Install via git:
 
