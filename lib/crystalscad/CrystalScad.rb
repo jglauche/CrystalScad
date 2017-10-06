@@ -256,8 +256,28 @@ module CrystalScad
   class AdvancedPrimitive < Primitive
     
     
+		NUMERIC_ATTRIBUTES = []
+
+    def self.numeric_attributes(*attribute_names)
+			Array(attribute_names).flatten.each do |attrbute_name|
+				NUMERIC_ATTRIBUTES << attrbute_name.to_sym
+			end
+		end
+
+		class <<self
+			alias_method :numeric_attribute, :numeric_attributes
+		end
+
     def initialize(attributes)
-      @attr = attributes.collect { |k, v| "#{k} = \"#{v}\"" }.join(', ')
+			@attr = attributes.collect { |k, v|
+				value_output = if NUMERIC_ATTRIBUTES.include?(k.to_sym)
+					v.to_f
+				else
+					"\"#{v}\""
+				end
+
+				"#{k} = #{value_output}"
+			}.join(', ')
       super
     end
     
@@ -269,6 +289,7 @@ module CrystalScad
 
 
   class Text < AdvancedPrimitive
+		numeric_attributes :size, :spacing
 		def initialize(attributes)
 			@operation = "text"
 			super(attributes)
