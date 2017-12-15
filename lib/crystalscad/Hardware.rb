@@ -357,9 +357,8 @@ module CrystalScad::Hardware
 
 
 	class TSlot < CrystalScad::Assembly
-		# the code in this class is based on code by Nathan Zadoks 	
-		# taken from https://github.com/nathan7/scadlib
-		# Ported to CrystalScad by Joachim Glauche
+		# the code in this class is based on code by edef1c 	
+		# Ported to CrystalScad by Jennifer Glauche 
 		# License: GPLv3
 		attr_accessor :args
 		def initialize(args={})

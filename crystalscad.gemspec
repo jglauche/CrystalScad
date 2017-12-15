@@ -7,9 +7,9 @@ require "crystalscad/version"
 Gem::Specification.new do |gem|
   gem.name        = "crystalscad"
   gem.version     = CrystalScad::VERSION
-  gem.authors     = ["Joachim Glauche"]
-  gem.email       = ["webmaster@joaz.de"]
-  gem.homepage    = "http://github.com/Joaz/CrystalScad"
+  gem.authors     = ["Jennifer Glauche"]
+  gem.email       = ["mail@crystalscad.jglauche.de"]
+  gem.homepage    = "http://github.com/jglauche/CrystalScad"
   gem.summary     = %q{CrystalScad is a framework for programming OpenScad models in Ruby}
   gem.description = %q{Inspired by SolidPython, based on RubyScad}
 		
