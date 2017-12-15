@@ -4,7 +4,7 @@ require "crystalscad"
 include CrystalScad
 
 # Used to debug
-# https://github.com/Joaz/CrystalScad/issues/5
+# https://github.com/jglauche/CrystalScad/issues/5
 
 pipe = Pipe.new(diameter:10)
 
