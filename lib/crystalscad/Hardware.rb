@@ -54,11 +54,11 @@ module CrystalScad::Hardware
 			add_to_bom
 			case @args[:type].to_s
   			when "912"
-    			res = bolt_912(@args[:additional_length], @args[:additional_diameter])
+    			res = bolt_912(@args[:additional_length], @args[:additional_diameter], @args[:head_margin])
   			when "933"
     			res = bolt_933(@args[:additional_length], @args[:additional_diameter], @args[:head_margin])
 	      when "7380"
-    			res = bolt_7380(@args[:additional_length], @args[:additional_diameter])
+    			res = bolt_7380(@args[:additional_length], @args[:additional_diameter], @args[:head_margin])
 		    else
 		      raise "unkown type #{args[:type]} for Bolt!"
 		  end
@@ -89,8 +89,11 @@ module CrystalScad::Hardware
 		end 
 
     # ISO 7380
-  	def bolt_7380(additional_length=0, addtional_diameter=0)
-	    chart_iso7380 = {
+  	def bolt_7380(additional_length=0, addtional_diameter=0, head_margin=0)
+	    if head_margin.to_f != 0
+				puts "[warning] :head_margin is not implemented for 7380 bolts"
+			end
+			chart_iso7380 = {
 	                    3 => {head_dia:5.7,head_length:1.65},
 	                    4 => {head_dia:7.6,head_length:2.2},
 	                    5 => {head_dia:9.5,head_length:2.75},
@@ -107,9 +110,8 @@ module CrystalScad::Hardware
 	  end
 
     # DIN 912
-		def bolt_912(additional_length=0, addtional_diameter=0)
+		def bolt_912(additional_length=0, addtional_diameter=0, head_margin=0)
 			
-	
 			chart_din912 = {2 => {head_dia:3.8,head_length:2,thread_length:16},
               			  2.5=> {head_dia:4.5,head_length:2.5,thread_length:17},
 			                3 => {head_dia:5.5,head_length:3,thread_length:18},
@@ -131,8 +133,7 @@ module CrystalScad::Hardware
 										
 										 }
 
-			res = cylinder(d:chart_din912[@size][:head_dia],h:chart_din912[@size][:head_length]).translate(z:-chart_din912[@size][:head_length]).color("Gainsboro") 
-			
+			res = cylinder(d:chart_din912[@size][:head_dia]+head_margin,h:chart_din912[@size][:head_length]).translate(z:-chart_din912[@size][:head_length]).color("Gainsboro") 			
 			total_length = @length + additional_length
 			thread_length=chart_din912[@size][:thread_length]		
 	    if total_length.to_f <= thread_length
@@ -343,9 +344,9 @@ module CrystalScad::Hardware
 		end
 
 		def nut_934(show=true,margin=0,height_margin=0)		
-			@s += margin
+			size = @s + margin
 			
-			res = cylinder(d:(@s/Math.sqrt(3))*2,h:@height+height_margin,fn:6)
+			res = cylinder(d:(size/Math.sqrt(3))*2,h:@height+height_margin,fn:6)
 			res -= cylinder(d:@size,h:@height) if show == true
 		 	if @support
 				res -= add_support			
